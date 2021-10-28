@@ -1,0 +1,88 @@
+<div class="bis-notify">
+    <label class="notify-result">{{ settings.bis_text_success }}</label>
+    <label class="notify-needed">{{ settings.bis_text }}</label>
+    <input type="text" placeholder="Email Address" name="email" id="email-notify" class="notify-me bis-email Form__Input" />
+    <button id="bis-notify-submit" data-variant="{{ product.selected_or_first_available_variant.id }}" class="klaviyo-bis-trigger btn btn--secondary notify-me bis-click{% if show_preorder_button %} small-padding{% endif %}">
+        {% unless show_preorder_button %}{{ 'products.product.oos_notify_button' | t | default: 'NOTIFY ME' }}{% else %}{{ 'products.product.oos_preorder_button' | t | default: 'JOIN PREORDER LIST' }}{% endunless %}
+    </button>
+</div>
+  <script type="text/javascript">
+    window.productTags = {{ product.tags | json }};
+
+    window.onload = function () {
+        $(document).ready(function () {
+            window.variant_changed({{ product.selected_or_first_available_variant | json }});
+        });
+ 
+        var bis = {
+            account: 'KGCmEv',
+            platform: 'shopify',
+            product: '{{ product.id }}',
+            subscribe_for_newsletter: false
+        };
+ 
+        $('.bis-click').click(function (e) {
+        e.preventDefault();
+ 
+        var resultDiv = $('.notify-result');
+        var emailInput = $('.bis-email');
+        var submitButton = $('.bis-click');
+ 
+        var postData = {
+            a: bis.account,
+            email: emailInput.val(),
+            variant: $(this).attr('data-variant'),
+            product: bis.product,
+            platform: bis.platform,
+            subscribe_for_newsletter: bis.subscribe_for_newsletter,
+            g: ''
+        };
+ 
+        if (validateEmail(postData.email)) {
+            emailInput.removeClass('error');
+ 
+            $.post('https://a.klaviyo.com/onsite/components/back-in-stock/subscribe', postData, function (data) {
+            if (data.success) {
+                // show success message
+                resultDiv.text('Success! We\'ll let you know when this item is back in stock.');
+                resultDiv.addClass('success');
+                emailInput.hide();
+                submitButton.hide();
+                resultDiv.show();
+            } else {
+                // show failure message
+                console.log(data);
+                resultDiv.text('An error occurred while processing your request. Please try again later.');
+                resultDiv.addClass('failure');
+                emailInput.hide();
+                submitButton.hide();
+                resultDiv.show();
+            }
+            });
+        } else {
+            emailInput.addClass('error');
+        }
+        });
+ 
+        $('.bis-email').change(function () {
+            var email = $(this).val();
+    
+            if (validateEmail(email)) {
+                $(this).removeClass('error');
+            } else {
+                $(this).addClass('error');
+            }
+        });
+ 
+        function validateEmail(strEmail) {
+            var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+ 
+            if (filter.test(strEmail)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    };
+  </script>

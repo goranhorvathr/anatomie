@@ -1,0 +1,70 @@
+{% paginate search.results by 16 %}
+<div class="container page-width">
+  <h1 class="large-title center">
+    {% if search.performed %}
+      {% capture terms %}{{ search.terms | remove: '*' }}{% endcapture %}
+      {% if search.results_count == 0 %}
+        {{ 'general.search.no_results_html' | t: terms: terms }}
+      {% else %}
+        {{ 'general.search.results_for_html' | t: terms: terms }}
+      {% endif %}
+    {% else %}
+      {{ 'general.search.title' | t }}
+    {% endif %}
+  </h1>
+
+  <div class="large-row center">
+    <form action="/search" method="get" role="search" class="search-page-form">
+      <input type="hidden" name="type" value="{{ settings.search_type }}" />
+      <input type="hidden" name="options[prefix]" value="last" />
+      <label for="Search" class="label-hidden">
+        {{ 'general.search.placeholder' | t }}
+      </label>
+      <input type="search"
+            name="q"
+            id="Search"
+            value="{{ search.terms | escape | remove: '*' }}"
+            placeholder="{{ 'general.search.placeholder' | t }}">
+      <button type="submit" class="btn search-page-button">
+        {{ 'general.search.submit' | t }}
+      </button>
+    </form>
+  </div>
+
+  {% if search.performed %}
+    <div class="grid grid--uniform grid--uniform-row-gutters large-row">
+      {% for item in search.results %}
+
+          {% if item.object_type == 'product' %}
+
+            {% include 'product-block', product: item, quickbuy: settings.quickbuy_buttons_toggle %}
+
+          {% else %}
+
+            <div class="grid__item one-quarter small-down--one-half">
+              {% assign featured_image = item.image | default: item.featured_image %}
+              {% if featured_image != blank %}
+                <a href="{{ item.url }}" title="{{ item.title | escape }}">
+                  {% include 'responsive-image', image: featured_image %}
+                </a>
+              {% endif %}
+              <h5 class="title row">{{ item.title | link_to: item.url }}</h5>
+              <div>{{ item.content | strip_html | truncatewords: 30 }}</div>
+
+              <a href="{{ item.url }}">
+                {{ 'blogs.article.read_more' | t }}
+              </a>
+            </div>
+
+          {% endif %}
+
+      {% endfor %}
+    </div>
+
+    {% if paginate.pages > 1 %}
+      {% include 'pagination' %}
+    {% endif %}
+  {% endif %}
+
+</div>
+{% endpaginate %}

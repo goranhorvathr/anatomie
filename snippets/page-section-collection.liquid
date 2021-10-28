@@ -1,0 +1,11 @@
+
+<div id="bc-sf-filter-wrapper" class="page-width collection-product-list" {% if block.settings.no-margins == false %}style="margin-top: 25px; margin-bottom: 25px;"{% endif %}>
+    <div id="bc-sf-filter-products" class="main_flex">
+{% for product in collections[block.settings.collection].products %}
+{% assign quickbuy_toggle = settings.quickbuy_buttons_toggle %}
+{% include 'product-block', quickbuy: quickbuy_toggle %}
+
+{% endfor %}
+
+</div>
+</div>

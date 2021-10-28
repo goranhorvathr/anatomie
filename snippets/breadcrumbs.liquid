@@ -1,0 +1,62 @@
+{% assign show_crumbs = true %}
+{% assign show_collection_listing_link = false %}
+{% capture divider %}<span class="feather-icon">{% include 'feather-chevron-right' %}</span>{% endcapture %}
+{% capture crumb_html %}
+<div class="breadcrumbs {% if template contains 'product' %}page-width{% endif %}">
+  <div class="container">
+    <div class="page-width breadcrumbs__inner">
+      <ul class="breadcrumbs__links">
+        <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/" itemprop="url"><span itemprop="title">{{ 'layout.breadcrumbs.home' | t }}</span></a> {{ divider }}</li>
+        {% if template contains 'article' %}
+          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ blog.url }}" itemprop="url"><span itemprop="title">{{ blog.title }}</span></a> {{ divider }}</li>
+          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ article.url }}" itemprop="url"><span itemprop="title">{{ article.title }}</span></a></li>
+        {% elsif template contains 'blog' %}
+          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ blog.url }}" itemprop="url"><span itemprop="title">{{ blog.title }}</span></a>
+            {% if current_tags %}{{ divider }}{% endif %}
+          </li>
+          {% if current_tags %}
+            <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ blog.url }}/tagged/{% for tag in current_tags %}{{ tag | handle }}{% unless forloop.last %}+{% endunless %}{% endfor %}" itemprop="url"><span itemprop="title">{% for tag in current_tags %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}</span></a></li>
+          {% endif %}
+        {% elsif template contains 'list-collections' %}
+          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/collections" itemprop="url"><span itemprop="title">{{ 'layout.breadcrumbs.collections' | t }}</a></li>
+        {% elsif template contains 'collection' %}
+          {% if show_collection_listing_link %}
+            <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/collections" itemprop="url">  <span itemprop="title">{{ 'layout.breadcrumbs.collections' | t }}</a> {{ divider }}</li>
+          {% endif %}
+          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/collections/{{ collection.handle }}" itemprop="url"><span itemprop="title">{{ collection.title }}</span></a></li>
+        {% elsif template contains 'product' %}
+          {% if collection and show_collection_listing_link %}
+            <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/collections" itemprop="url"><span itemprop="title">{{ 'layout.breadcrumbs.collections' | t }}</a> {{ divider }}</li>
+          {% endif %}
+          {% if collection %}
+            <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ collection.url }}" itemprop="url"><span itemprop="title">{{ collection.title }}</span></a> {{ divider }}</li>
+          {% endif %}
+          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ product.url }}" itemprop="url"><span itemprop="title">{{ product.title }}</span></a></li>
+        {% elsif template contains 'page' %}
+          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ page.url }}" itemprop="url"><span itemprop="title">{{ page.title }}</span></a></li>
+        {% elsif template contains 'cart' %}
+          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/cart" itemprop="url"><span itemprop="title">{{ 'cart.general.title' | t }}</span></a></li>
+        {% elsif template contains 'search' %}
+          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/search" itemprop="url"><span itemprop="title">{{ 'general.search.title' | t }}</span></a></li>
+        {% elsif template contains 'customers' %}
+          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/account" itemprop="url"><span itemprop="title">{{ 'customer.account.title' | t }}</a></li>
+        {% else %}
+          {% assign show_crumbs = false %}
+        {% endif %}
+      </ul>
+
+      {% comment %}## REMOVE NEXT/PREV PRODUCT
+      {% if template contains 'product' and collection %}
+        {% if collection.previous_product %}
+          <span class="breadcrumbs__opposing-links desktop-only"><a href="{{ collection.previous_product.url }}" title="{{ collection.previous_product.title | escape }}"><span class="feather-icon">{% include 'feather-chevron-left' %}</span> {{ 'products.product.prev_product' | t }}</a></span>
+        {% endif %}
+        {% if collection.next_product %}
+          <span class="breadcrumbs__opposing-links desktop-only"><a href="{{ collection.next_product.url }}" title="{{ collection.next_product.title | escape }}">{{ 'products.product.next_product' | t }} <span class="feather-icon">{% include 'feather-chevron-right' %}</span></a></span>
+        {% endif %}
+      {% endif %}{% endcomment %}
+    </div>
+  </div>
+</div>
+{% endcapture %}
+
+{% if show_crumbs %}{{ crumb_html }}{% endif %}

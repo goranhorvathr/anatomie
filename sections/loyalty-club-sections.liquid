@@ -1,0 +1,291 @@
+{% include 'loyalty-club-page-sections' %}
+<script type="text/javascript" src="{{ 'slick-custom.min.js' | asset_url }}" defer="defer"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function () {
+  $('.slides-container').slick({
+    arrows: true,
+    dots: true,
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000
+  });
+});
+</script>
+{% schema %}
+{
+  "name": "Loyalty Club Sections",
+  "blocks": [
+    {
+      "type": "header_slide",
+      "name": "Header Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "type": "select",
+          "id": "text_color",
+          "label": "Text Color",
+          "options": [
+            {
+              "value": "black",
+              "label": "Black"
+            },
+            {
+              "value": "white",
+              "label": "White"
+            }
+          ],
+          "default": "black"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Link to navigate to if the user clicks on the slide"
+        }
+      ]
+    },
+    {
+      "type": "full_width_image",
+      "name": "Full Width Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Link to navigate to if the user clicks on the image"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#EFEEEA"
+        }
+      ]
+    },
+    {
+      "type": "full_width_text",
+      "name": "Full Width Text",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "left_right_split",
+      "name": "Left/Right Media Content",
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_position",
+          "label": "Media Position",
+          "options": [
+            {
+              "label": "Left",
+              "value": "left"
+            },
+            {
+              "label": "Right",
+              "value": "right"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#EFEEEA"
+        }
+      ]
+    },
+    {
+      "type": "full_width_video",
+      "name": "Full Width Video",
+      "settings": [
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "label": "Video link",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+        },
+        {
+          "type": "video_url",
+          "id": "mobile_video_url",
+          "label": "Mobile Video link",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+        }
+      ]
+    },
+    {
+      "type": "side_by_side_review",
+      "name": "Side-By-Side Reviews",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "header",
+          "content": "Review 1"
+        },
+        {
+          "type": "textarea",
+          "id": "review1",
+          "label": "Review Text"
+        },
+        {
+          "type": "text",
+          "id": "reviewer_name1",
+          "label": "Reviewer Name"
+        },
+        {
+          "type": "text",
+          "id": "reviewer_title1",
+          "label": "Reviewer Title"
+        },
+        {
+          "type": "header",
+          "content": "Review 2"
+        },
+        {
+          "type": "textarea",
+          "id": "review2",
+          "label": "Review Text"
+        },
+        {
+          "type": "text",
+          "id": "reviewer_name2",
+          "label": "Reviewer Name"
+        },
+        {
+          "type": "text",
+          "id": "reviewer_title2",
+          "label": "Reviewer Title"
+        }
+      ]
+    },
+    {
+      "type": "image_two_columns",
+      "name": "Image w/ Text Columns",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "header",
+          "content": "Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "desktop_image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image"
+        },
+        {
+          "type": "header",
+          "content": "Columns"
+        },
+        {
+          "type": "html",
+          "id": "column1",
+          "label": "Column 1 Text"
+        },
+        {
+          "type": "html",
+          "id": "column2",
+          "label": "Column 2 Text"
+        }
+      ]
+    },
+    {
+      "type": "featured_collection",
+      "name": "Featured collection",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Featured collection"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text",
+          "default": "Shop now"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "row_count",
+          "label": "Rows",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 1
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,129 @@
+{% section 'product-template' %}
+<div class="page-width">
+  <div class="additional-tabs">
+    <div class="tab active" data-type="product-recommendations">
+      {% assign alt_tab = 'products.product.alt_cross_tab_handle' | t %}
+      <a href="#">{% if product.handle == alt_tab %}{{ 'products.product.alt_cross_tab' | t }}{% else %}{{ 'products.product.cross_sell_tab' | t }}{% endif %}</a>
+    </div>
+    <div class="tab" data-type="recently-viewed">
+      <a href="#">Recently Viewed</a>
+    </div>
+  </div>
+  <div class="additional-block active" data-type="product-recommendations">
+    {% render 'cross-sell', product: product, template: template %}
+  </div>
+  <div class="additional-block" data-type="recently-viewed">
+    {% section 'recently-viewed' %}
+  </div>
+</div>
+
+<div class="page-width">
+  {% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: true, product: product %}
+</div>
+
+{% section 'as-seen-in' %}
+{% section 'like2have' %}
+
+<script type="application/json" class="ProductJson-{{ product.id }}">
+ {{ product | json }}
+</script>
+
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function () {
+  $('.additional-tabs a').click(function (e) {
+    var link = $(e.target);
+    var section = link.closest('.page-width');
+    var allTabs = section.find('.tab');
+    var tab = link.closest('div');
+    var allBlocks = section.find('.additional-block');
+    var block = section.find('.additional-block[data-type="' + link.closest('div').attr('data-type') + '"]');
+
+    allTabs.removeClass('active');
+    allBlocks.removeClass('active');
+
+    tab.addClass('active');
+    block.addClass('active');
+
+    return false;
+  });
+});
+</script>
+
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "url": {{ shop.url | append: product.url | json }},
+  {%- if product.featured_image -%}
+    {%- assign image_size = product.featured_image.width | append: 'x' -%}
+    "image": [
+      {{ product.featured_image.src | img_url: image_size | prepend: "https:" | json }}
+    ],
+  {%- endif -%}
+  "description": {{ product.description | strip_html | json }},
+  {%- if current_variant.sku != blank -%}
+    "sku": {{ current_variant.sku | json }},
+  {%- endif -%}
+  {%- if current_variant.barcode.size == 12 -%}
+    "gtin12": {{ current_variant.barcode | json }},
+  {%- endif -%}
+  {%- if current_variant.barcode.size == 13 -%}
+    "gtin13": {{ current_variant.barcode | json}},
+  {%- endif -%}
+  {%- if current_variant.barcode.size == 14 -%}
+    "gtin14": {{ current_variant.barcode | json}},
+  {%- endif -%}
+  "brand": {
+    "@type": "Thing",
+    "name": {{ product.vendor | json }}
+  },
+  "offers": [
+    {%- for variant in product.variants -%}
+      {
+        "@type" : "Offer",
+        {%- if variant.sku != blank -%}
+          "sku": {{ variant.sku | json }},
+        {%- endif -%}
+        {%- if variant.barcode.size == 12 -%}
+          "gtin12": {{ variant.barcode | json}},
+        {%- endif -%}
+        {%- if variant.barcode.size == 13 -%}
+          "gtin13": {{ variant.barcode | json}},
+        {%- endif -%}
+        {%- if variant.barcode.size == 14 -%}
+          "gtin14": {{ variant.barcode | json}},
+        {%- endif -%}
+        "availability" : "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+        "price" : {{ variant.price | divided_by: 100.00 | json }},
+        "priceCurrency" : {{ cart.currency.iso_code | json }},
+        "url" : {{ shop.url | append: variant.url | json }}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>
+
+<!-- Start: ShoppingGives Change Commerce Styles -->
+<style>
+.shoppinggives-tag.contained #sg-main-text .cc-shop-give {
+    display: none !important;
+}
+
+.shoppinggives-tag.contained #sg-main-text:before {
+    content: "Make a purchase. Make a difference." !important;
+    display: block !important;
+    font-weight: 700 !important;
+    margin-bottom: 4px !important;
+}
+  
+#sg-main-text {
+   	font-family: "Gotham",sans-serif !important;
+    font-weight: 300 !important;
+    font-style: normal !important;
+}
+</style>
+<!-- End: ShoppingGives Change Commerce Styles -->

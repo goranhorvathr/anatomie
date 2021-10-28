@@ -1,0 +1,31 @@
+{% if block.settings.image != blank %}
+<div class="header_slide">
+  <a{% if block.settings.link != blank %} href="{{ block.settings.link }}"{% endif %}>
+    {% if block.settings.title != blank %}
+    <div class="page-title {{ block.settings.text_color }}">
+      <h2>{{ block.settings.title }}</h2>
+      {% if block.settings.subtitle != blank %}
+      <h3>{{ block.settings.subtitle }}</h3>
+      {% endif %}
+    </div>
+    {% endif %}
+    <img src="{{ block.settings.image | img_url: '2000x' }}" />
+    <div class="overlaid-logos {{ block.settings.logo_position }}">
+      {% if block.settings.logo1 != blank or block.settings.logo1_filename != blank %}
+        {% if block.settings.logo1 != blank %}
+          {{ block.settings.logo1 | img_url: '500x' | img_tag: '', 'overlaid-logo' }}
+        {% else %}
+          {{ block.settings.logo1_filename | file_url | img_tag: '', 'overlaid-logo' }}
+        {% endif %}
+      {% endif %}
+      {% if block.settings.logo2 != blank or block.settings.logo2_filename != blank %}
+        {% if block.settings.logo2 != blank %}
+          {{ block.settings.logo2 | img_url: '500x' | img_tag: '', 'overlaid-logo' }}
+        {% else %}
+          {{ block.settings.logo2_filename | file_url | img_tag: '', 'overlaid-logo' }}
+        {% endif %}
+      {% endif %}
+    </div>
+  </a>
+</div>
+{% endif %}

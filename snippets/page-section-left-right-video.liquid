@@ -1,0 +1,46 @@
+<div class="left-right-content-split left-right-video-split" style="background-color: {{ block.settings.background_color }};">
+  <div class="image {{ block.settings.media_position }}">
+    <div class="video-container global-border-radius vimeo-wrapper">
+      {% if block.settings.video_url != blank %}
+        <div class="video-embed video-{{ block.id }}">
+          {% if block.settings.video_url.type == "youtube" %}
+            <iframe src="//www.youtube.com/embed/{{ block.settings.video_url.id }}?rel=0&showinfo=0&vq=720"  height="480" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+          {% elsif block.settings.video_url.type == "vimeo" %}
+            <iframe src="//player.vimeo.com/video/{{ block.settings.video_url.id }}?background=0&autoplay=0&loop=0&byline=0&title=0"  height="480" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+          {% endif %}
+        </div>
+      {% elsif block.settings.html5_video != blank %}
+        <div class="video-element">
+          <video class="video-{{ block.id }}" preload autoplay loop muted playsinline controls>
+            <source src="{{ block.settings.html5_video }}">
+          </video>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="text {% if block.settings.media_position == 'left' %}right{% else %}left{% endif %}">
+    {% if block.settings.title_image != blank %}
+      <div class="left-right-logo-image">
+        {{ block.settings.title_image | img_url: '300x' | img_tag }}
+      </div>
+    {% endif %}
+    {% if block.settings.title != blank %}
+      <h2 class="subheader">{{ block.settings.title }}</h2>
+    {% endif %}
+    {% if block.settings.texthtml != blank %}
+    <div class="left-right-textblock">
+      {{ block.settings.texthtml }}
+    </div>
+    {% else %}
+    <div class="left-right-textblock">
+      {{ block.settings.text }}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .left-right-textblock {
+    font-weight: {{block.settings.boldness}};
+  }
+</style>

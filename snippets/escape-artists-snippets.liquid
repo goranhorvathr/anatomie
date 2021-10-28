@@ -1,0 +1,188 @@
+{% assign header_slides = '' %}
+{% assign page_content = '' %}
+
+<style>
+.ea_single_col_block {
+  padding: 60px 50px;
+  text-align:center;
+
+  .content {
+    width:90%;
+    text-align:center;
+    display:inline-block;
+  }
+
+  h1.heading {
+      font-size: 34px;
+      font-weight:400;
+  }
+
+  p {
+    display:inline-block;
+  }
+
+
+}
+
+.ea_exclusive-benefits {
+  padding: 60px 50px;
+  text-align:center;
+
+}
+
+.left-benefits, .right-benefits {
+  width:49%;
+  min-height:200px;
+  display:inline-block;
+  vertical-align: top;
+  text-align:center;
+}
+
+.left-benefits {
+  border-right:2px solid #000000;
+}
+
+@media screen and (max-width: 740px) {
+  .left-benefits, .right-benefits {
+    width:90%;
+  }
+  .left-benefits {
+    border-right:3px solid #fff;
+    padding-bottom:30px;
+    border-bottom:3px solid #000;
+    margin-bottom:40px;
+  }
+}
+
+.left-benefits ul, .right-benefits ul {
+  display:inline-block;
+  max-width:340px;
+  width:90%;
+}
+
+.left-benefits li, .right-benefits li {
+  list-style-type: square;
+  padding-bottom:20px;
+}
+
+</style>
+
+{% for block in section.blocks %}
+  {% case block.type %}
+    {% when 'single_col_block' %}
+      {% capture single_col_block %}
+        <div class="ea_single_col_block"
+          style="{% if block.settings.bg_image != blank %} background-image:url('{{ block.settings.bg_image | img_url: '2000x' }}');{% endif %}">
+          <div class="content">
+            {% if block.settings.heading != blank %}
+              <h1 class="heading" style="font-size:40px;font-weight:200;font-family:sans-serif;{% if block.settings.bg_image != blank %}color:#fff;{% endif %}">{{block.settings.heading}}</h1>
+            {% endif %}
+            {% if block.settings.text != blank %}
+              <p class="text" style="display:inline-block;max-width:640px;{% if block.settings.bg_image != blank %}color:#fff;{% endif %}">{{block.settings.text}}</p>
+            {% endif %}
+
+            {% if block.settings.button != blank and block.settings.link != blank %}
+              <br/><br/>
+              <a href="{{block.settings.link}}" style="text-decoration:none;text-transform:uppercase;margin:40px 0px 0px;font-weight:800;">
+                <div style="padding:6px 20px;
+                  {% if block.settings.bg_image != blank %} background-color:#fff;color:#000; border:2px solid #fff;
+                  {% else %} background-color:#000;color:#fff;border:2px solid #000; {% endif %};max-width:320px;display:inline-block;">
+                    {{block.settings.button}}
+                </div>
+                </a>
+            {% endif %}
+
+          </div>
+        </div>
+      {% endcapture %}
+      {% assign page_content = page_content | append: single_col_block %}
+
+    {% when 'exclusive-benefits' %}
+      {% capture exclusive-benefits %}
+      <div class="ea_exclusive-benefits">
+        {% if block.settings.heading != blank %}
+          <h1 style="font-size:32px;display:inline-block;width:100%;text-transform:uppercase;"> {{block.settings.heading}} </h1>
+          <div style="display:inline-block;width:100%;padding:35px 0px;">
+            <div class="left-benefits">
+              {% if block.settings.left_logo != blank %}
+                <img src="{{ block.settings.left_logo | img_url: '300px' }}" /><br/><br/>
+              {% endif %}
+              {% if block.settings.lefttitle != blank %}
+                <h2>{{ block.settings.lefttitle }}</h2><br/>
+              {% endif %}
+              {% if block.settings.lefthtml != blank %}
+                <p>{{ block.settings.lefthtml }}</p>
+              {% endif %}
+            </div>
+            <div class="right-benefits">
+              {% if block.settings.right_logo != blank %}
+                <img src="{{ block.settings.right_logo | img_url: '300px' }}" /><br/><br/>
+              {% endif %}
+              {% if block.settings.righttitle != blank %}
+                <h2>{{ block.settings.righttitle }}</h2><br/>
+              {% endif %}
+              {% if block.settings.righthtml != blank %}
+                <p class="excl-benefits">{{ block.settings.righthtml }}</p>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      {% endcapture %}
+      {% assign page_content = page_content | append: exclusive-benefits %}
+
+    {% when 'full_width_text' %}
+      {% capture full_width_text %}
+        {% include 'page-section-full-width-text', collapse: true %}
+      {% endcapture %}
+      {% assign page_content = page_content | append: full_width_text %}
+    {% when 'left_right_split' %}
+      {% capture left_right_split %}
+        {% include 'page-section-left-right-split' %}
+      {% endcapture %}
+      {% assign page_content = page_content | append: left_right_split %}
+    {% when 'full_width_video' %}
+    {% capture video_section %}
+      {% include 'page-section-video' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: video_section %}
+    {% when 'full_width_image' %}
+      {% capture full_width_image %}
+        {% include 'page-section-full-width-image-below' %}
+      {% endcapture %}
+      {% assign page_content = page_content | append: full_width_image %}
+    {% when 'side_by_side_review' %}
+    {% capture reviews_section %}
+      {% include 'page-section-reviews' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: reviews_section %}
+    {% when 'image_two_columns' %}
+    {% capture image_columns_section %}
+      {% include 'page-section-image-columns' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: image_columns_section %}
+    {% when 'featured_collection' %}
+    {% capture featured_collection_section %}
+      {% include 'page-section-featured-collection' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: featured_collection_section %}
+    {% when 'primary_collection'%}
+      {% capture collection_data %}
+        {% include 'page-section-collection' %}
+      {% endcapture %}
+      {% assign page_content = page_content | append: collection_data %}
+    {% when 'full_width_button' %}
+    {% capture full_width_button %}
+      {% include 'page-section-header-button' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: full_width_button %}
+    {% endcase %}
+{% endfor %}
+
+{% if section.settings.full_width %}
+{{ page_content }}
+{% else %}
+<div class="page-width">
+  {{ page_content }}
+</div>
+{% endif %}

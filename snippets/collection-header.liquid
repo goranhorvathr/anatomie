@@ -1,0 +1,340 @@
+{% comment %}
+ BACKGROUND PHOTO LOGIC
+ Collection Metafield global.header_image
+ Collection Image
+
+ Shop FallBack Images
+ shop.metafields.global.background_1..5
+{% endcomment %}
+{% assign is_shop_by = shop_by_type | default: false %}
+{% assign background_image = '' %}
+
+{% assign background_position = 'bottom center' %}
+
+{% assign background_video = collection.metafields.global.header_video | split: "/" | last %}
+{% assign background_video_padding = collection.metafields.global.header_video_padding %}
+{% assign background_vimeo_video = collection.metafields.global.header_plyr_video | split: "/" | last %}
+  {% assign is_video = false %}
+{% if collection.metafields.global.header_video_controls == "true" %}
+  {% assign is_video = true %}
+{% else %}
+  {% if collection.metafields.global.header_image != blank %}
+      {% assign background_image = collection.metafields.global.header_image | file_img_url: '2500x' %}
+  {% elsif collection.image %}
+      {% assign background_image = collection.image | img_url: '2500x' %}
+  {% else %}
+      {% comment %}
+      {% capture time_seed %}{{ 'now' | date: "%s" }}{% endcapture %}
+      {% assign random = time_seed | times: 1103515245 | plus: 12345 | divided_by: 65536 | modulo: 32768 | modulo: 5 | plus: 1 %}  
+      {% capture randomImage %}background_{{ random }}{% endcapture %}
+      {% assign background_image = shop.metafields.global[randomImage] | file_img_url: '2500x' %}
+      <!-- IMAGE FOUND - {{ randomImage }} -->
+      {% endcomment %}
+  {% endif %}
+{% endif %}
+
+{% assign background_mobile = background_image %}
+{% if collection.metafields.global.header_image_mobile != blank %}
+  {% assign background_mobile = collection.metafields.global.header_image_mobile | file_img_url: '2500x' %}
+{% endif %}
+{% if collection.metafields.global.mobile_image != blank %}
+  {% assign background_mobile = collection.metafields.global.mobile_image | file_img_url: '2500x' %}
+{% endif %}
+{% if collection.metafields.global.header_mobile != blank %}
+  {% assign background_mobile = collection.metafields.global.header_mobile | file_img_url: '2500x' %}
+{% endif %}
+
+{% if collection.metafields.global.header_position != blank %}
+	{% assign background_position = collection.metafields.global.header_position %}
+{% endif %}
+
+
+
+
+{% if background_image != blank %}
+<style>
+  .content_before_collection {
+    {% if background_video == blank or '' %}
+      background-position: {{ background_position }};
+      background-image: URL(' {{ background_image }} ');
+    {%  endif %}
+  }
+  @media screen and (max-width: 990px) {
+    .content_before_collection {
+      background-image: URL(' {{ background_mobile }} ');
+      {% if template contains 'perfect-fit' %}height: 300px;{% else %}height: 85vh{% endif %};
+      {% if background_video != blank %} background-position: {{ background_position }}; {%  endif %}
+    }
+    {% if template contains 'perfect-fit' %} 
+    .anatomie-collection .collection-header.shop-by-type .menu_box {
+      top: 340px;
+    }
+    .anatomie-collection .collection-header.shop-by-type {
+      margin-bottom: 375px;
+    }
+    .bc-sf-filter-clear-all {
+      display: none;
+    }
+    {% endif %}
+  }
+
+  {% if background_video != blank %}
+    .site-header {
+      z-index: 4;
+    }
+    @media screen and (max-width 990px) {
+      .anatomie-collection .collection-header {
+        margin: 0 auto;
+        margin-bottom: 70px;
+      }
+    }
+    .content_before_collection {
+      flex-direction: column;
+      background-image: none;
+      height: 600px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+    .embed-container {
+      position: relative;
+      padding-bottom: {% if background_video_padding != blank %} {{- background_video_padding | append: "%" -}}
+      {% else %} 56.25% {% endif %};
+      max-width: 100%;
+      height: 0;
+      overflow: hidden;
+      width: 100%;
+    }
+    .embed-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .anatomie-collection .menu_box {
+      position: absolute;
+      padding: 0 2rem;
+    }
+    {% endif %}
+</style>
+{% else %}
+
+<style>
+ 
+  @media screen and (max-width: 990px) {
+    
+    {% if template contains 'perfect-fit' %} 
+    .bc-sf-filter-clear-all {
+      display: none;
+    }
+    {% endif %}
+  }
+
+
+
+  .anatomie-collection .collection-header {
+    margin-bottom: initial;
+    margin-left: initial;
+    margin-right: initial;
+    background:none;
+  }
+  .content_before_collection {
+    height: auto;
+    background: none;
+  }
+</style>
+
+{% endif %}
+
+{% if is_video %}
+<style>
+  .collection-header .content_before_collection {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-right: -30px;
+    margin-left: -30px;
+  }
+
+  .content_before_collection .menu_box {
+    width: 100%;
+    max-width: none;
+  }
+
+  .content_before_collection .vimeo_video_container {
+    width: 100%;
+  }
+
+  @media screen and (max-width: 767px) {
+    .collection-header .content_before_collection {
+      margin: 0;
+    }
+  }
+</style>
+{% endif %}
+
+
+
+<header class="collection-header global-border-radius standout-collection-bg standout-collection-bg--{{ collection.handle }} {% if featured_product != blank %}collection-header--with-product{% endif %}{% if is_shop_by %} shop-by-type{% endif %}{% if background_image != blank %}{% else %}collection-no-image{% endif %}" role="banner">
+<div class="content_before_collection">
+  {% if is_video %}
+    <div class="vimeo_video_container">
+      <div id="plyrPlayer" data-plyr-provider="vimeo" data-plyr-embed-id="{{ background_vimeo_video }}"></div>
+    </div>
+  {% endif  %}
+  {% if collection.metafields.global.header_link != blank %}<a class="header_link--absolute" href="{{ collection.metafields.global.header_link }}" title="{{ collection.metafields.global.header_link_title | escape }}" target="_blank"></a>{% endif %}
+  {% if background_video != blank %}
+  <div class='embed-container'>
+    <iframe src="https://player.vimeo.com/video/{{- background_video  -}}?background=false&responsive=true&autoplay=1&loop=1&byline=0&title=0" frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+  </div>
+  {% endif %}
+    <div class="menu_box">
+    <div class="collection-header__container collection-header__content-container center">
+        {% include 'collection-title-block' %}
+
+
+        
+        {% if collection.metafields.global.sub-nav != blank %}
+        <div class="sublinks">
+          {% for link in linklists[collection.metafields.global.sub-nav].links %}
+            <a href="{{ link.url }}"  class="internal-links {% if link.active %}active-link{% endif %}">{{ link.title }}</a>
+          {% endfor %}
+
+          <select name="capsules" id="capsules">
+            {% for link in linklists[collection.metafields.global.sub-nav].links %}
+              <option value="{{forloop.index0}}" data-href="{{ link.url }}" {% if link.active %}selected{% endif %}>{{ link.title }}</option>
+            {% endfor %}
+          </select>
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              $('#capsules').change(function(){
+                window.location = $(this).children('option:selected').data('href');
+              });
+            });
+          </script>
+
+        </div>
+        {% endif %}
+
+        {% if shop_by_type_content != blank %}
+        <div class="shop-by-types">
+            {{ shop_by_type_content }}
+        </div>
+        <script type="text/javascript">
+          var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+              sParameterName = sURLVariables[i].split('=');
+
+              if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+              }
+            }
+          };
+
+          document.addEventListener('DOMContentLoaded', function () {
+            // Set selected status on page load
+            var filterBlock = $('.collection-header__content-container .shop-by-types');
+            var filterParentBlock = $('.heading-filter-wrapper');
+            var allBlocks = filterBlock.find('.shop_by_section');
+            var selectedOption = getUrlParameter('pf_t_tag');
+
+            if (selectedOption && selectedOption.length > 0) {
+              var originalString = unescape(selectedOption);
+              filterBlock.addClass('selected');
+
+              for (var i = 0; i < allBlocks.length; i++) {
+                var element = $(allBlocks[i]);
+                var link = element.find('a');
+
+                if (link && link.length > 0) {
+                  var tags = link.attr('data-tags').split(',');
+
+                  for (var count = 0; count < tags.length; count++) {
+                    if (tags[count] == selectedOption) {
+                      element.addClass('selected');
+                    }
+                  }
+                }
+              }
+
+              filterParentBlock.removeClass('hidden');
+            }
+
+            $('.shop_by_section a').click(function () {
+              var thisBlock = $(this).closest('.shop_by_section');
+              var otherBlocks = $(this).closest('.shop-by-types').find('.shop_by_section');
+              var filterParentBlock = $('.heading-filter-wrapper');
+              var blockParent = $('#bc-sf-filter-tree-h .bc-sf-filter-option-block[data-type="tag"]');
+              var blockContent = blockParent.find('.bc-sf-filter-block-content');
+              var applyButton = blockContent.find('button.bc-sf-filter-select-button');
+              var tags = $(this).attr('data-tags').split(',');
+              
+              // Deselect other options
+              var matches = blockContent.find('a.bc-sf-filter-option-item.selected');
+              
+              for (var i = 0; i < matches.length; i++) {
+                matches.get(i).click();
+              }
+
+              for (var i = 0; i < tags.length; i++) {
+                var match = blockContent.find('a[data-title="' + tags[i] + '"]');
+
+                if (match && match.length > 0)
+                  match.get(0).click();
+              }
+
+              // Set the filter
+              applyButton.closest('.bc-sf-filter-option-block').find('.bc-sf-filter-block-title a[role=button]').get(0).click();
+              $('#bc-sf-filter-filter-option-open').val(blockParent.attr)
+              applyButton.get(0).click();
+
+              // Clear the selected top menu item
+              otherBlocks.removeClass('selected');
+              thisBlock.addClass('selected');
+
+              // Set icon transparency if it isnt already set
+              thisBlock.closest('.shop-by-types').addClass('selected');
+
+              // Show the filter dropdowns
+              filterParentBlock.removeClass('hidden');
+
+              return false;
+            });
+
+
+            $(document).on('click', '.bc-sf-filter-clear-all', function () {
+              var shopByFilterContainer = $(this).closest('.collection-header__container').find('.shop-by-types');
+              var filterParentBlock = $('.heading-filter-wrapper');
+              var shopByFilters = shopByFilterContainer.find('.shop_by_section');
+
+              shopByFilters.removeClass('selected');
+              shopByFilterContainer.removeClass('selected');
+
+              filterParentBlock.addClass('hidden');
+            });
+          });
+        </script>
+        {% endif %}
+        <div class="heading-filter-wrapper{% if shop_by_type == true %} hidden{% endif %}">
+          {% if section.settings.phone_number != blank %}
+          <div class="collection-telephone">
+            {% assign phone_number = section.settings.phone_number | replace: '+', '' | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' | replace: '.', '' %}
+            <a href="tel:{{ phone_number }}">Questions? {{ section.settings.phone_number }}</a>
+          </div>
+          {% endif %}
+          <div id="bc-sf-filter-tree-h">{% include 'bc-sf-filter-tree-placeholder-h' %}</div>
+          {% comment %}<div id="bc-sf-filter-tree-mobile">{% include 'bc-sf-filter-skeleton', type: 'button' %}</div>{% endcomment %}
+          {% comment %}<div id="bc-sf-filter-top-sorting-mobile" class="bc-sf-filter-custom-sorting">{% include 'bc-sf-filter-skeleton', type: 'button' %}</div>{% endcomment %}
+          <div id="bc-sf-filter-tree">{% include 'bc-sf-filter-tree-placeholder' %}</div>
+        </div>
+      </div>
+  </div>
+</div>
+</header>

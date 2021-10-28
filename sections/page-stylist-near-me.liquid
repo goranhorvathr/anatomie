@@ -1,0 +1,62 @@
+{% include 'page-near-me-header' %}
+{% include 'page-near-me-stylist' %}
+
+{% schema %}
+{
+    "name": "Stylist Near Me",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "show_title",
+            "label": "Show Title",
+            "default": true
+        },
+        {
+            "type": "image_picker",
+            "id": "header",
+            "label": "Choose a header image"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "stylist",
+            "name": "Stylist",
+            "settings": [
+                {
+                    "type": "header",
+                    "content": "Stylist Portrait"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "portrait",
+                    "label": "Select a portrait:"
+                },
+                {
+                    "type": "header",
+                    "content": "Stylist Details"
+                },
+                {
+                    "type": "text",
+                    "id": "name",
+                    "label": "Stylist Name"
+                },
+                {
+                    "type": "text",
+                    "id": "city",
+                    "label": "Stylist City"
+                },
+                {
+                    "type": "text",
+                    "id": "state",
+                    "label": "Stylist State"
+                },
+                {
+                    "type": "url",
+                    "id": "page",
+                    "label": "Stylist Page"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

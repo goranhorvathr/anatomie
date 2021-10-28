@@ -1,0 +1,27 @@
+<div>
+    {%if section.settings.header_image != blank %}
+        <img src="{{section.settings.header_image}}" alt="{% if section.setting.alt_text%}{{section.settings.alt_text}}{% else%}{{"window width header image"}}{%endif%}">
+    {% else %}
+        {% include 'responsive-image' %}
+    {% endif %}
+</div>
+
+{% schema %}
+
+{
+    "name": "Header Image",
+    "settings": [
+    {
+        "type": "image_picker",
+        "id": "header_image",
+        "label": "Image"
+    },
+    {
+        "type": "text",
+        "id": "alt_text",
+        "label": "Image Description"
+    }
+    ]
+}
+
+{% endschema %}

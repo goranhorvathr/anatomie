@@ -1,0 +1,22 @@
+{%- comment -%}
+
+KLARNA messaging snippet
+
+type: type of include needed, use same snippet for both global header and includes on the pdp / cart/ plp
+
+Added 8/18/2020 JAP
+
+{%- endcomment -%}
+
+{%- case type -%}
+
+    {%- when 'global' -%}
+        <script async src="https://na-library.klarnaservices.com/lib.js" data-client-id="b07c034c-2db0-5877-83e3-0a643fc9a8cc"></script>
+
+    {%- when 'pdp' -%}
+        <div style="margin-top: 8px;">
+            <klarna-placement data-key="credit-promotion-badge" data-locale="en-US" data-purchase-amount="{{current_variant.price}}" ></klarna-placement>
+        </div>
+    {%- when 'page' -%}
+        <klarna-placement data-key="info-page" data-locale="en-US" ></klarna-placement>
+{%- endcase -%}

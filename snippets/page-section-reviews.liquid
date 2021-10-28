@@ -1,0 +1,25 @@
+{% if block.settings.review1 != blank or block.settings.review2 != blank %}
+{% if block.settings.title != blank %}
+  <h2 class="center">{{ block.settings.title }}</h2>
+{% endif %}
+<div class="side-by-side-reviews">
+    {% for i in (1..2) %}
+    {% assign review_item  = 'review' | append: i %}
+    {% assign reviewer_name  = 'reviewer_name' | append: i %}
+    {% assign reviewer_title  = 'reviewer_title' | append: i %}
+
+    {% if block.settings[review_item] != blank %}
+    <div class="anatomie-review">
+        <div class="review-content">
+            <div class="review-text">
+                {{ block.settings[review_item] }}
+            </div>
+            <div class="reviewer-details">
+                {{ '&ndash;&nbsp;' | append: block.settings[reviewer_name] }}{% if block.settings[reviewer_title] != blank %},<br />{{ block.settings[reviewer_title] }}{% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}

@@ -1,0 +1,49 @@
+{% if title != blank or text != blank or url_text != blank or url_text_2 != blank or url_text_3 != blank %}
+{%- assign bg_alpha = background_color | color_extract: 'alpha' -%}
+{%- if bg_alpha == 0 -%}
+  {%- assign overlay_has_transparent_bg = true -%}
+{%- else -%}
+  {%- assign overlay_has_transparent_bg = false -%}
+{%- endif -%}
+{%- assign link_inherit_color = false -%}
+{%- if url_style == 'link_style' -%}
+  {%- if bg_alpha == 0 or background_color != settings.color_body_background -%}
+    {%- assign link_inherit_color = true -%}
+  {%- endif -%}
+{%- endif -%}
+
+<div class="overlay overlay--center global-border-radius-overlays {% if position != blank %}overlay--{{ position }}{% endif %} {% if url != blank and url_text != blank %}overlay--has-link{% endif %} {% if overlay_has_transparent_bg %}overlay--use-body-colours-mobile{% endif %} {% if background_color == settings.color_body_background %}overlay--bg-matches-page-bg{% endif %} {% if ignoreJS %}{% else %}avoid-overlaps__item{% endif %}">
+  <div class="overlay__bg {% if bg_alpha == 0 %}overlay__bg--transparent{% endif %}" {% if bg_alpha > 0 %}style="background-color: {{ background_color }}"{% endif %}></div>
+  <div class="overlay__content" style="color: {{ text_color }}">
+    {% if rssicon %}
+      <a class="blog-rsslink" href="{{ blog.url }}.atom" title="{{ blog.title | escape }} RSS">
+        <span class="feather-icon">{% include 'feather-rss' %}</span>
+      </a>
+    {% endif %}
+    {% if title != blank %}
+    <h2 class="large-title">{{ title }}</h2>
+    {% endif %}
+    {% if text != blank %}
+    <div class="overlay-text">{{ text }}</div>
+    {% endif %}
+    {% if url_text != blank or url_text_2 != blank or url_text_3 != blank %}
+      <div class="overlay__links">
+    {% endif %}
+    {% if url_text != blank %}
+      <a class="{% if url_style == 'button_1' %}btn btn--small btn--primary{% elsif url_style == 'button_2' %}btn btn--small btn--secondary{% elsif url_style =='button_3' %}btn btn--small btn--anatomie-white{% elsif url_style =='button_4' %}btn btn--small btn--anatomie-clear{% else %}standard-link {% if link_inherit_color == true %}standard-link--inherit-color{% endif %}{% endif %}" href="{{ url }}">{{ url_text | escape }}</a>
+    {% endif %}
+    {% if url_text_2 != blank %}
+      <a class="{% if url_style == 'button_1' %}btn btn--small btn--primary{% elsif url_style == 'button_2' %}btn btn--small btn--secondary{% elsif url_style =='button_3' %}btn btn--small btn--anatomie-white{% elsif url_style =='button_4' %}btn btn--small btn--anatomie-clear{% else %}standard-link {% if link_inherit_color == true %}standard-link--inherit-color{% endif %}{% endif %}" href="{{ url_2 }}">{{ url_text_2 | escape }}</a>
+    {% endif %}
+    {% if url_text_3 != blank %}
+    <a class="{% if url_style == 'button_1' %}btn btn--small btn--primary{% elsif url_style == 'button_2' %}btn btn--small btn--secondary{% elsif url_style =='button_3' %}btn btn--small btn--anatomie-white{% elsif url_style =='button_4' %}btn btn--small btn--anatomie-clear{% else %}standard-link {% if link_inherit_color == true %}standard-link--inherit-color{% endif %}{% endif %}" href="{{ url_3 }}">{{ url_text_3 | escape }}</a>
+    {% endif %}
+    {% if url_text != blank or url_text_2 != blank or url_text_3 != blank %}
+      </div>
+    {% endif %}
+    {% if footer != blank %}
+      <div class="overlay-footer">{{ footer }}</div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}

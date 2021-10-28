@@ -1,0 +1,309 @@
+<!doctype html>
+<html class="no-js supports-no-cookies" lang="{{ shop.locale }}">
+<head>
+  <!--Bug Herd-->
+  <!--<script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=ihx3nsxnhdyu5xej8hx9rw" async="true"></script>-->
+  
+  <!-- Boost v1.3.2 -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta name="google-site-verification" content="UK1-xsIQ6nDxe0qSBJAXVy31rZ7d8obeLGAw0KMpI4g" />  
+  <meta name="google-site-verification" content="sgkytheFsBe6RmFg8VPTetOHpexBEKkP6G6La4ifYmw" />
+  <meta name="google-site-verification" content="M0eodRePyK2M9KghTCsZJFG0QKR4lz7gO8ASwAJ6Qh0" />  
+  <meta name="google-site-verification" content="QFstDMkWI29DwhMbpBtt79P2yYt2i8-D86wyv_q8M0s" />
+<meta name="google-site-verification" content="IRvuSc4TT9lk_DmP-6glddtHBSykuXm2RgwQK3yLV2Y" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MLK4P6D');</script>
+  <!-- End Google Tag Manager -->  
+    
+  <script>(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"17216949"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");</script>  
+  
+  {% include 'tracking-pixels' %}
+  
+  {% if template contains 'collection' %}
+  
+  	{% if collection.metafields.global['no-index'] == "1" %}
+  		<meta name="robots" content="noindex">
+    {% else %}
+  		<meta name="robots" content="index,follow">
+  	{% endif %}
+  
+  
+    <link rel="canonical" href="https://{{ shop.domain }}/collections/{{ collection.handle }}" />
+  {% elsif template contains 'blog' %}
+   <link rel="canonical" href="https://{{ shop.domain }}/blogs/blog" />
+   <meta name="robots" content="index,follow">
+  {% else %}
+    <link rel="canonical" href="{{ canonical_url }}" />
+    <meta name="robots" content="index,follow">
+  {% endif %}
+  
+  
+  {% if settings.favicon != blank %}
+    <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+  {% endif %}
+
+  {% capture seo_title %}
+    {{ page_title }}
+    {% if current_tags %}
+      {%- assign meta_tags = current_tags | join: ', ' %} – {{ 'general.meta.tags' | t: tags: meta_tags -}}
+    {% endif %}
+    {% if current_page != 1 %}
+      – {{ 'general.meta.page' | t: page: current_page }}
+    {% endif %}
+    {% unless page_title contains shop.name %}
+      – {{ shop.name }}
+    {% endunless %}
+  {% endcapture %}
+  <title>{{ seo_title }}</title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  {% include 'social-meta-tags' %}
+
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+
+  {{ 'gotham.css' | asset_url | stylesheet_tag }}
+{% include 'judgeme_core' %}
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+
+    window.theme = {
+      strings: {
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }}
+      },
+      {% if settings.enable_theme_currency_converter %}
+      {% if shop.enabled_currencies == blank or shop.enabled_currencies.size < 2 %}
+      Currency: {
+        shopCurrency: '{{ shop.currency }}',
+        defaultCurrency: '{{ settings.default_currency | default: shop.currency }}',
+        default_money_with_currency_format: {{ shop.money_with_currency_format | strip_html | json }},
+        default_money_format: {{ shop.money_format | strip_html | json }}
+      },
+      {% endif %}
+      {% endif %}
+      moneyFormat: {{ shop.money_format | json }}
+    };
+  </script>
+
+  {% if template.directory == 'customers' %}
+    <!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script><!--<![endif]-->
+    <!--[if lte IE 9]><script src="{{ 'shopify_common.js' | shopify_asset_url }}"></script><![endif]-->
+  {% endif %}
+
+  <!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
+  <!--[if lt IE 9]><script src="{{ 'vendor.js' | asset_url }}"></script><![endif]-->
+
+  <!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'theme.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
+  <!--[if lt IE 9]><script src="{{ 'theme.js' | asset_url }}"></script><![endif]-->
+
+  {{ content_for_header }}
+  {% include 'bc-sf-filter-style' %} 
+</head>
+
+<body id="{{ page_title | handle }}" class="template-{{ template.name | handle }}">
+
+  <a class="in-page-link visually-hidden skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
+
+  {% section 'header' %}
+  {% comment %}{% include 'breadcrumbs' %}{% endcomment %}
+
+  <main id="MainContent">
+    {% assign accent_alpha = settings.accent_color | color_extract: 'alpha' %}
+    {% if template contains 'index' and settings.color_body_background != settings.accent_color and accent_alpha > 0%}
+      <span class="accent-background"></span>
+    {% endif %}
+
+    {{ content_for_layout }}
+    
+    {% if template contains 'index' %}
+    {% section 'like2haveit-homepage' %}
+    {% endif %}
+     
+  </main>
+
+  {% section 'footer' %}
+
+  <!--<a href="#" class="focus-tint" aria-hidden="true" aria-label="{{ 'general.accessibility_labels.close' | t }}"></a>-->
+  {% if template contains 'product' %}{% include 'photoswipe' %}{% endif %}
+  
+  
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "url": "{{ shop.url | append: '/products/' | append: product.handle }}",
+  "name": "{{ product.title }}",
+  "image": "{{ product.featured_image.src | img_url: 'master' }}",
+  "description": "{{ page_description }}", 
+  {% if collection_urls != blank %}
+  "category": [
+    {{ collection_urls }}
+  ],
+  {% endif %}
+  "brand": {
+    "name": "Anatomie"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "{{ shop.currency }}",
+    "price": "{{ current_variant.price | money_without_currency | remove: ',' }}",
+    "availability": "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+    "seller": {
+      "@type": "Organization",
+      "name": "Anatomie"
+    }
+  }
+}  </script>
+  
+  
+  
+<!--Referral Candy-->
+<div id="refcandy-poprocks" data-id="jluzji6seincroe1ns6anqkc0" data-location="left" data-minimized="no" data-version="2"></div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//portal.referralcandy.com/assets/widgets/refcandy-poprocks.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","refcandy-poprocks-js");</script>  
+<!--Referral Candy-->
+  <script>
+  __attentive_domain="anatomie.attn.tv",function(){window.__attentive={invoked:!1,show:function(){this.invoked=!0}};var t=!1,e=function(){if(document.readyState&&!/loaded|complete/.test(document.readyState))return void setTimeout(e,10);if(!t)return t=!0,void setTimeout(e,50);var n=document.createElement("script");n.setAttribute("async","true"),n.type="text/javascript",n.src="https://cdn.attn.tv/loader.js",((document.getElementsByTagName("head")||[null])[0]||document.getElementsByTagName("script")[0].parentNode).appendChild(n)};if(document.readyState && /loaded|complete/.test(document.readyState))e();else window.addEventListener?window.addEventListener("load",e,!1):window.attachEvent("onload",e)}(),window.__attentive.show();
+</script>
+  
+<script type="text/javascript" src="//cdn.callrail.com/companies/384920274/b7d660a456dcec9847e6/12/swap.js"></script>  
+  
+  {% include 'revy-bundle-script' %}  
+  
+<!-- CRITEO START -->
+{% include 'criteo-tracking' %}
+<!-- CRITEO END -->
+
+  
+{% include 'bc-sf-filter' %}
+
+ <!-- Start of anatomie Zendesk Widget script -->
+ <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=d1e174e8-35b8-4e5b-a28a-7475a003cc00"> </script>
+ <!-- End of anatomie Zendesk Widget script --> 
+ 
+ {% if template == 'collection' %}
+
+ <!-- Facebook Conversion Code for Product Page -->
+     <script>(function() {
+     var _fbq = window._fbq || (window._fbq = []);
+     if (!_fbq.loaded) {
+     var fbds = document.createElement('script');
+     fbds.async = true;
+     fbds.src = '//connect.facebook.net/en_US/fbds.js';
+     var s = document.getElementsByTagName('script')[0];
+     s.parentNode.insertBefore(fbds, s);
+     _fbq.loaded = true;
+     }
+     })();
+     window._fbq = window._fbq || [];
+     window._fbq.push(['track', '6026097864437', {'value':'0.00','currency':'USD'}]);
+     </script>
+     <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6026097864437&amp;cd[value]=0.00&amp;cd[currency]=USD&amp…" /></noscript>
+ {% endif %}
+ 
+ {% if template == 'cart' %}
+   <!-- Facebook Conversion Code for Adds to Cart -->
+     <script>(function() {
+     var _fbq = window._fbq || (window._fbq = []);
+     if (!_fbq.loaded) {
+     var fbds = document.createElement('script');
+     fbds.async = true;
+     fbds.src = '//connect.facebook.net/en_US/fbds.js';
+     var s = document.getElementsByTagName('script')[0];
+     s.parentNode.insertBefore(fbds, s);
+     _fbq.loaded = true;
+     }
+     })();
+     window._fbq = window._fbq || [];
+     window._fbq.push(['track', '6026097923837', {'value':'0.00','currency':'USD'}]);
+     </script>
+     <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6026097923837&amp;cd[value]=0.00&amp;cd[currency]=USD&amp…" /></noscript>
+ {% endif %}
+ 
+   <!-- Facebook Conversion Code for Checkouts -->
+     <script>(function() {
+     var _fbq = window._fbq || (window._fbq = []);
+     if (!_fbq.loaded) {
+     var fbds = document.createElement('script');
+     fbds.async = true;
+     fbds.src = '//connect.facebook.net/en_US/fbds.js';
+     var s = document.getElementsByTagName('script')[0];
+     s.parentNode.insertBefore(fbds, s);
+     _fbq.loaded = true;
+     }
+     })();
+     window._fbq = window._fbq || [];
+     window._fbq.push(['track', '6024272638637', {'value':'0.00','currency':'USD'}]);
+     </script>
+     <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6024272638637&amp;cd[value]=0.00&amp;cd[currency]=USD&amp…" /></noscript>
+     
+<!-- Global site tag (gtag.js) - Google AdWords: 869919885 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-869919885"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-869919885');
+</script>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLK4P6D"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->  
+
+
+  {% if template == 'product' %}
+  		{% assign collection_urls = '' %}
+  			{% for collection in product.collections %}
+  	 			{% assign collection_urls = collection_urls | append: '"' | append: shop.url | append: '/collections/' | append: collection.handle | append: '"' %}
+  	 				{% if forloop.last != true %}
+       					{% assign collection_urls = collection_urls | append:',' %}
+  	 				{% endif %}
+  			{% endfor %}
+
+ 		 {% assign current_variant = product.selected_or_first_available_variant %}
+
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "url": "{{ shop.url | append: '/products/' | append: product.handle }}",
+  "name": "{{ product.title }}",
+  "image": "{{ product.featured_image.src | img_url: 'master' }}",
+  "description": "{{ page_description }}", 
+  {% if collection_urls != blank %}
+  "category": [
+    {{ collection_urls }}
+  ],
+  {% endif %}
+  "brand": {
+    "name": "Anatomie"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "{{ shop.currency }}",
+    "price": "{{ current_variant.price | money_without_currency | remove: ',' }}",
+    "availability": "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+    "seller": {
+      "@type": "Organization",
+      "name": "Anatomie"
+    }
+  }
+}  </script>
+  	{% endif %}
+{% render 'spurit_po2_theme_snippet' %}
+</body>
+</html>

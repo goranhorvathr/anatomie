@@ -1,0 +1,103 @@
+
+{% assign blog_id = blog.handle %}
+{% assign blog_img = '' %}
+{% if section.blocks %}
+  {% for block in section.blocks %}
+    {% assign current_id = block.settings.block_blog %}
+    {% if blog_id == current_id %}
+      {% if block.settings.blog_image != blank %}
+        {% assign blog_img = block.settings.blog_image %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% assign selTag =  request.path | split:'/type-' | last %}
+
+<div style="position:relative;">
+  <div style="width:100%;text-align:center;">
+    <div class="header_slide" style="background-image:url('{{ blog_img | img_url: '2000x' }}');
+      height:300px;background-position:top;">
+      <div class="page-width" style="padding-top:150px;height:150px;text-align:center;text-decoration:uppercase;">
+        <div style="width:100%;background-color:#fff;height:152px;">
+          <h2 style="padding:30px 20px 10px;font-weight:600;text-transform:uppercase;">Connect with an Escape Artist</h2>
+          <h4 style="padding:5px 20px 10px;font-weight:800;font-size:90%;text-transform:uppercase;">Filter by Experience</h4>
+          <select id="escape-artists-select" style="width:80%;max-width:320px;padding:10px;">
+                <option value="/blogs/{{blog_id}}/" {%if selTag contains 'blogs/escape-artists' %}selected{% endif %}>ALL</option>
+                {% for aTag in blog.all_tags %}
+                  {% if aTag contains 'type::' %}
+                    {% assign tagKey = aTag | downcase | replace: ' ','-' | replace: ':','-' %}
+                    <option value="/blogs/{{blog_id}}/tagged/{{aTag | replace: '::','-' | handle }}"
+                      {%if tagKey contains selTag %} selected{% endif %}
+                    >
+                      {{aTag | replace: 'type::','' | upcase }}
+                    </option>
+                  {% endif %}
+                {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="page-width main-flex" style="background-color:#fff;width:90%;min-height:400px;padding-top:60px;margin-bottom:100px;">
+    {% for article in blog.articles %}
+        <div class="blog-escape-actists one-third small-down--one-half" style="display:inline-block;padding:10px;margin-top:20px;vertical-align:top;">
+          <a href="/blogs/{{article.handle}}" style="text-decoration:none;">
+            <img src="{{ article.image | img_url: '1024x1024' }}"
+              alt="{{ article.image.alt | escape }}"
+              style="width:100%;object-fit: cover;height:240px;"
+              class="rimage-background__image"/>
+          </a>
+            <strong>{{article.title | strip_html | truncate: 45 }}</strong>
+            <p style="">{{ article.excerpt }}</p>
+            <a href="/blogs/{{article.handle}}" style="text-decoration:underline;color:#000;margin-top:12px;">Read More</a>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    var loadIt = function(url, callback){
+              var script = document.createElement("script")
+              script.type = "text/javascript";
+              if (script.readyState){  //IE
+                  script.onreadystatechange = function(){
+                      if (script.readyState == "loaded" ||
+                              script.readyState == "complete"){
+                          script.onreadystatechange = null;
+                          callback();
+                      }
+                  };
+              } else {  //Others
+                  script.onload = function(){
+                      callback();
+                  };
+              }
+              script.src = url;
+              document.getElementsByTagName("head")[0].appendChild(script);
+        };
+
+    // EscapeArtists CustomJS starts
+    var EscapeArtists = function($){
+
+        $( "#escape-artists-select" ).change(function() {
+          let selVal = $( this ).find(":selected").val();
+          console.log(selVal);
+          window.location = selVal;
+
+        });
+
+
+    };
+    // EscapeArtists CustomJS ends
+
+    if ((typeof jQuery === 'undefined') || (parseFloat(jQuery.fn.jquery) < 1.7)) {
+          loadIt('//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', function(){
+            jQuery191 = jQuery.noConflict(true);
+            EscapeArtists(jQuery191);
+          });
+        } else {
+          EscapeArtists(jQuery);
+        }
+  </script>

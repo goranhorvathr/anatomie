@@ -1,0 +1,15 @@
+{% comment %}
+// Use METAFIELD version of heading title, MUST USE H2/H3. H1 at bottom of page for SEO
+{% endcomment %}
+<div class="collection-header__title-container">
+    {% if collection.metafields.global.header_title != blank %}
+        <h2 class="large-title">{{ collection.metafields.global.header_title }}</h2>
+            {%- if collection.metafields.global.header_subTitle != blank -%}<h3>{{ collection.metafields.global.header_subTitle }}</h3>{%- endif -%}
+    {% else %}
+        <h1 class="large-title">{{ collection.title }}</h1>
+    {% endif %}
+
+    {% comment %}{% for link in linklists['jackets'].links %}
+        <a href="{{ link.url }}" class="collection_nav{% if link.url == canonical_url %} active {% endif %}">{{ link.title }}</a>
+    {% endfor %}{% endcomment %}
+</div>

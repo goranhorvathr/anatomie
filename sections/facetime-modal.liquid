@@ -1,0 +1,212 @@
+
+<div  id="section-id-{{ section.id }}" class="facetime-modal-overlay">
+<div  class="facetime-modal">
+    <h2 class="facetime-modal-title">{{ section.settings.title }}</h2>
+    <div class="facetime-modal-blocks">
+    {% for block in section.blocks %}
+        <div class="factime-modal-profile-block">
+            <img class="rimage__image lazy fade-in {% if cover %}cover{% endif %}" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'/%3E" data-src="{{ block.settings.image | img_url: '400x400', crop: 'center' }}">
+            <h2>{{ block.settings.title }}</h2>
+            {{ block.settings.description }}
+            <a href="facetime:{{block.settings.phone_number}}">
+                <span>{% include 'icon-facetime' %}{{ block.settings.phone_number }}</span>
+            </a>
+        </div>
+    {% endfor%}
+    </div>
+
+</div>
+</div>
+
+
+<style>
+     #section-id-{{ section.id }}.facetime-modal-overlay {
+        display: none;
+        position: fixed;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0,0,0,0.4);;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        right: 0;
+        z-index: 1000;
+    }
+
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal-blocks {
+        max-width: 1260px;
+        display: flex;
+        flex-wrap: wrap;
+        {% if section.settings.enable_center_blocks %}
+            justify-content: center; 
+        {% endif %}
+    }
+
+ 
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-direction: column;
+        background: #fff;
+        padding: 30px;
+
+    }
+
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal h2 {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal .factime-modal-profile-block {
+        padding: 10px;
+        text-align: center;
+        font-size: 12px;
+        max-width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal .factime-modal-profile-block img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        margin: 0;
+    }
+
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal .factime-modal-profile-block p {
+        margin: 0;
+        margin-bottom: auto;
+    }
+
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal .factime-modal-profile-block svg {
+        width: 35px;
+        color: #fff;
+        fill: #fff;
+    }
+
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal .factime-modal-profile-block a {
+        width: 100%;
+        text-decoration: none;
+        margin-top: 10px;
+    }
+
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal .factime-modal-profile-block a span{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        color: #fff;
+        background-color: #000;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin: 0 auto;
+        font-weight: 500;
+        font-size: 22px;
+    }
+
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal-blocks::-webkit-scrollbar { 
+        display: none;  /* Safari and Chrome */
+    }
+
+    #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal-blocks {
+        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    @media (max-width: 1000px) {
+        #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal {
+            width: 50vw;
+            height: 80vh;
+        }
+        #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal-blocks {
+            flex-direction: column;
+            overflow-y: scroll;
+            flex-wrap: nowrap;
+            justify-content: normal;
+
+
+        }
+        #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal .factime-modal-profile-block {
+            max-width: 400px;
+        }
+    }
+
+    @media (max-width: 767px) {
+        #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal-blocks {
+            flex-direction: column;
+            overflow-y: scroll;
+            flex-wrap: nowrap;
+            justify-content: normal;
+        }
+
+        #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal {
+            width: 90vw;
+            height: 80vh
+        }
+        #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal .factime-modal-profile-block a span {
+            font-size: 18px;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        #section-id-{{ section.id }}.facetime-modal-overlay .facetime-modal .factime-modal-profile-block svg {
+            width: 25px;
+        }
+
+    }
+
+
+
+</style>
+
+
+{% schema %}
+{
+    "name": "Facetime Modal",
+    "settings": [
+        {
+            "type": "text",
+            "id": "title",
+            "label": "title"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_center_blocks",
+            "label": "Center blocks",
+            "default": true
+        }
+    ],
+    "blocks": [
+    {
+        "type": "profile",
+        "name": "Profile",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "title"
+            },
+            {
+                "type": "richtext",
+                "id": "description",
+                "label": "Description"
+            },
+            {
+                "type": "text",
+                "id": "phone_number",
+                "label": "Facetime number"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            }
+        ]
+    }
+
+    ]
+
+}
+{% endschema %}

@@ -1,0 +1,26 @@
+{% if block.settings.publication_link != blank %}<a href="{{ block.settings.publication_link }}" target="_blank">{% endif %}
+<div class="press-item grid__item one-third large-down--one-half small-down--one-whole">
+  <div class="press-img-wrapper accent-overlay">
+    {% if block.settings.publication_image != blank %}
+      <img class="press-img" src="{{ block.settings.publication_image | img_url: '500x500', crop: 'center' }}" alt="{{ shop.name }}" />
+    {% else %}
+      <div>{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+    {% endif %}
+    {% if block.settings.publication_logo != blank or block.settings.publication_title != blank %}
+      <div class="press-text-logo-wrapper">
+        {% if block.settings.publication_logo != blank %}
+          <img class="press-logo" src="{{ block.settings.publication_logo | img_url: '200x' }}" alt="" />
+        {% else if block.settings.logo_text_alt != blank %}
+          <h2 class="logo-text-alt">{{ block.settings.logo_text_alt }}</h2>
+        {% endif %}
+        {% if block.settings.publication_title != blank %}
+          <div class="press-text">{{ block.settings.publication_title }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  {% if block.settings.publication_title != blank %}
+    <div class="press-text-mobile">{{ block.settings.publication_title }}</div>
+  {% endif %}
+</div>
+{% if block.settings.publication_link != blank %}</a>{% endif %}

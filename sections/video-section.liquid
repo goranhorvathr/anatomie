@@ -1,0 +1,587 @@
+<section class="relative new_container container--no-mobile-padding large-row video-section js-video-section section-{{ section.id }}" data-section-id="{{ section.id }}"  data-section-type="video">
+  <div class="new_page_width"></div>
+    {% if section.settings.title != blank %}
+      <div class="text-center large-row">
+        <h2 class="row">{{ section.settings.title | escape }}</h2>
+      </div>
+    {% endif %}
+    <div class="relative ">
+      <div class="video-container global-border-radius vimeo-wrapper {% if section.settings.desktop_hls_centered and section.settings.desktop_hls_url != blank %}hls-centered{% endif %}">
+        {% if section.settings.desktop_hls_url != blank %}
+        	<video id="video--{{section.id}}" class="" autoplay loop muted playsinline></video>
+        {% else %}
+        	{% if section.settings.video_url == blank %}
+          		<iframe src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720"  height="480" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        	{% else %}
+          		{% if section.settings.video_url.type == "youtube" %}
+            		<iframe src="//www.youtube.com/embed/{{ section.settings.video_url.id }}?rel=0&showinfo=0&vq=720"  height="480" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+          		{% endif %}
+          		{% if section.settings.video_url.type == "vimeo" %}
+            		<iframe src="//player.vimeo.com/video/{{ section.settings.video_url.id }}?background=1&autoplay=1&loop=1&byline=0&title=0"  height="480" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+          		{% endif %}
+        	{% endif %}
+        {% endif %}
+      </div>
+      {% if section.settings.desktop_hls_url == blank %}
+      	<div class="video-container-mobile global-border-radius vimeo-wrapper">
+        	{% if section.settings.mobile_video_url == blank %}
+          	<iframe src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720"  height="480" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        	{% else %}
+          		{% if section.settings.mobile_video_url.type == "youtube" %}
+            		<iframe src="//www.youtube.com/embed/{{ section.settings.mobile_video_url.id }}?rel=0&showinfo=0&vq=720"  height="480" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+          		{% endif %}
+          		{% if section.settings.mobile_video_url.type == "vimeo" %}
+            		<iframe src="//player.vimeo.com/video/{{ section.settings.mobile_video_url.id }}?background=1&autoplay=1&loop=1&byline=0&title=0"  height="480" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+          		{% endif %}
+        	{% endif %}
+      	</div>
+      {% endif %}
+      <div class="floating_text {{ section.settings.text_position }}">
+        <div class="floating_text_inner">
+          {% if section.settings.title_on_video != blank %}<h1 class="header mobile">{{ section.settings.title_on_video }}</h1>{% endif %}
+          <h5 class="subheader">{{ section.settings.subtitle | upcase }}</h5>
+          <a class="btn btn--small section-video-btn" href="{{ section.settings.button_link }}">{{ section.settings.button_label | upcase}}</a>
+         {% comment %} <button> <a href="{{ section.settings.button_link }}"> {{ section.settings.button_label | upcase}}</a> </button>{% endcomment %}
+      	</div>
+      </div>
+    </div>
+  
+ 
+</section>
+
+<style>
+  
+.vimeo-wrapper iframe {
+   width: 100%;
+}
+.new_page_width {
+	margin: 0 auto; 
+	max-width: 100%;
+}
+.new_container{
+	margin: 0 auto;
+    width: 100%;
+}
+.section-{{ section.id }} .header {
+  font-size:{{ section.settings.desktop_title_font_size }}px !important; 
+  color: {{ section.settings.desktop_title_color }};
+}
+
+.section-{{ section.id }} .subheader {
+  font-size:{{ section.settings.desktop_subtitle_font_size }}px !important; 
+  color: {{ section.settings.desktop_subtitle_color }};
+}
+
+.section-{{ section.id }} .floating_text_inner {
+  position: relative;
+  display: inline-block;
+  left: {{ section.settings.desktop_x_position }}%;
+  top: {{ section.settings.desktop_y_position }}%;
+  text-align: {{ section.settings.desktop_text_align }};
+  width: 
+  {% if section.settings.desktop_width < 30 %}
+    {% assign difference =  30 | minus: section.settings.desktop_width %}
+    {{ section.settings.desktop_width | plus: difference }}%;
+  {% else %}
+    {{ section.settings.desktop_width }}%;
+  {% endif %}
+}
+
+.section-{{ section.id }} .section-video-btn {
+  border: 1px solid {{ section.settings.desktop_button_background_color }};
+  font-size: {{ section.settings.desktop_button_font_size }}px;
+  box-shadow: none; 
+  color: {{ section.settings.desktop_button_color}}; 
+  background-color: {{ section.settings.desktop_button_background_color }}; 
+  padding: {{ section.settings.desktop_button_height }}px;
+  width: {{ section.settings.desktop_button_width }}px;
+}
+
+.section-{{ section.id }} .section-video-btn:hover {
+  border: 1px solid {{ section.settings.button_border_color }};
+}
+
+@media screen and (max-width: 1200px) {
+  .section-{{ section.id }} .floating_text {
+    position: absolute;
+  }
+  .section-{{ section.id }} .header {
+    font-size:{{ section.settings.mobile_title_font_size }}px !important; 
+    color: {{ section.settings.mobile_title_color }};
+  }
+
+  .section-{{ section.id }} .subheader {
+    font-size:{{ section.settings.mobile_subtitle_font_size }}px !important; 
+    color: {{ section.settings.mobile_subtitle_color }};
+  }
+
+  .section-{{ section.id }} .floating_text_inner {
+    left: {{ section.settings.desktop_x_position }}%;
+    top: {{ section.settings.desktop_y_position }}%;
+    text-align: {{ section.settings.mobile_text_align }};
+  }
+
+  .section-{{ section.id }} .section-video-btn {
+    font-size: {{ section.settings.mobile_button_font_size }}px;
+    border: 1px solid {{ section.settings.mobile_button_border_color }};
+    color: {{ section.settings.mobile_button_color}}; 
+    background-color: {{ section.settings.mobile_button_background_color }}; 
+    padding: {{ section.settings.mobile_button_height }}px;
+    width: {{ section.settings.mobile_button_width }}px;
+  }
+}
+
+@media screen and (max-width: 675px) {
+  .section-{{ section.id }} .floating_text {
+    position: absolute;
+  }
+
+  .section-{{ section.id }} .floating_text_inner {
+      width: 100%;
+      left: {{ section.settings.mobile_x_position }}%;
+      top: {{ section.settings.mobile_y_position }}%;
+      text-align: {{ section.settings.mobile_text_align }};
+
+  }
+
+  .section-{{ section.id }} .section-video-btn {
+    font-size: {{ section.settings.mobile_button_font_size }}px;
+    border: 1px solid {{ section.settings.mobile_button_background_color }};
+    color: {{ section.settings.mobile_button_color}}; 
+    background-color: {{ section.settings.mobile_button_background_color }}; 
+    padding: {{ section.settings.mobile_button_height }}px;
+    width: {{ section.settings.mobile_button_width }}px;
+  }
+}
+
+
+#shopify-section-{{section.id}} {
+	margin-top: 0;
+}
+
+.section-{{section.id}} {
+	margin-top: 0;
+}
+  
+   .section-{{section.id}} .hls-centered #video--{{section.id}} {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+  .section-{{section.id}} .video-container.hls-centered {
+    padding-bottom: initial;
+    height: initial;
+  }
+</style>
+
+
+{% if section.settings.desktop_hls_url != blank %}
+<script src="{{ 'hls.js' | asset_url }}"></script>
+<script>
+   
+  // videoFile = m3u3 url
+  // video = DOM Element, ex |  var video = document.getElementById('video');
+  function loadVideoViaHLS(videoFile, video) {
+    //if (!video.paused) { video.pause(); }
+    var hls = new Hls();
+    hls.loadLevel = 2;
+    
+    
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+      hls.loadSource(videoFile);
+      hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+        video.play();
+        hls.startLevel = (hls.levels.length - 1);
+      });
+    });
+  }
+  
+  function loadVideoViaSupportedHLS(videoFile, video) {
+  	video.src = videoFile;
+    video.addEventListener('loadedmetadata', function() {
+      	video.play();
+    });
+  }
+  
+  
+  {% if section.settings.mobile_hls_url != blank %}
+  	function videoManager(x) {
+    	if (Hls.isSupported()) {
+      
+      		if (x.matches) {
+      			loadVideoViaHLS('{{ section.settings.mobile_hls_url }}', document.getElementById('video--{{section.id}}'));
+    		} else {
+            	loadVideoViaHLS('{{ section.settings.desktop_hls_url }}', document.getElementById('video--{{section.id}}'));
+    		}
+      
+    	} else {
+     	// TBD ADDING VIDEO UNABLE TO LOAD ISSUES 
+    		if (x.matches) {
+      			loadVideoViaSupportedHLS('{{ section.settings.mobile_hls_url }}', document.getElementById('video--{{section.id}}'));
+    		} else {
+            	loadVideoViaSupportedHLS('{{ section.settings.desktop_hls_url }}', document.getElementById('video--{{section.id}}'));
+    		}
+    	}
+  	}
+  
+  	let x = window.matchMedia("(max-width: 768px)")
+  	videoManager(x);
+  
+  	x.addListener(videoManager);
+    
+  {% else %}
+   if (Hls.isSupported()) {
+  	loadVideoViaHLS('{{ section.settings.desktop_hls_url }}', document.getElementById('video--{{section.id}}'));
+   } else {
+    loadVideoViaSupportedHLS('{{ section.settings.desktop_hls_url }}', document.getElementById('video--{{section.id}}'));
+   }
+  {% endif %}
+
+</script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "title",
+      "default": "SHINE ON"
+    },
+    {
+      "type": "text",
+      "id": "title_on_video",
+      "label": "title on Video"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "YOU CRAZY DIAMOND"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "SHOP SPRING NEW ARRIVALS"
+    },
+
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Desktop"
+    },
+    {
+      "type": "color",
+      "id": "desktop_button_color",
+      "label": "Button color",
+      "default": "#006699"
+    },
+    {
+      "type": "color",
+      "id": "desktop_button_background_color",
+      "label": "Button background color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "desktop_button_border_color",
+      "label": "Button border color",
+      "default": "#212b36"
+    },
+    {
+      "type": "range",
+      "id": "desktop_button_width",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop button width",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "desktop_button_height",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop button height",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "desktop_button_font_size",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop button font size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "color",
+      "id": "mobile_button_color",
+      "label": "Button color",
+      "default": "#006699"
+    },
+    {
+      "type": "color",
+      "id": "mobile_button_background_color",
+      "label": "Button background color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "mobile_button_border_color",
+      "label": "Button border color",
+      "default": "#212b36"
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_font_size",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile button font size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_width",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile button width",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_height",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile button height",
+      "default": 25
+    },
+    {
+      "type": "text",
+      "id": "travel_more",
+      "label": "Gif title",
+      "default": "Travel More. Pack Less."
+    },
+    {
+      "type": "text",
+      "id": "travel_less",
+      "label": "Gif sub title",
+      "default": "Never check a bag again with our on-the-go wardrobe"
+    },
+    {
+      "type": "header",
+      "content": "Text Color"
+    },
+    {
+      "type": "color",
+      "id": "desktop_title_color",
+      "label": "Desktop text color",
+      "default": "#006699"
+    },
+    {
+      "type": "color",
+      "id": "desktop_subtitle_color",
+      "label": "Desktop text color",
+      "default": "#000"
+    },
+    {
+      "type": "header",
+      "content": "Desktop"
+    },
+    {
+      "type": "range",
+      "id": "desktop_title_font_size",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop title font size",
+      "default": 80
+    },
+    
+    {
+      "type": "range",
+      "id": "desktop_subtitle_font_size",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop subtitle font size",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "desktop_x_position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop x position",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "desktop_y_position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop y position",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "desktop_width",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop text width",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "desktop_text_align",
+      "options": [
+        { "value": "left", "label": "Left"},
+        { "value": "center", "label": "Center"},
+        { "value": "right", "label": "Right"}
+      ],
+      "label": "Text alignment"
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "range",
+      "id": "mobile_title_font_size",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile title font size",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "mobile_subtitle_font_size",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile subtitle font size",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "mobile_x_position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile x position",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_y_position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile y position",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "mobile_text_align",
+      "options": [
+        { "value": "left", "label": "Left"},
+        { "value": "center", "label": "Center"},
+        { "value": "right", "label": "Right"}
+      ],
+      "label": "Text alignment"
+    },
+    {
+      "type": "header",
+      "content": "Video Settings"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video link",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+    },
+    {
+      "type": "video_url",
+      "id": "mobile_video_url",
+      "label": "Mobile Video link",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+    },
+	{
+		"type" : "text",
+		"id" : "desktop_hls_url",
+		"label" : "Desktop Streaming M3U3",
+		"info" : "Video M3U3 Streaming will take priority over other videos"
+	},
+	{
+		"type" : "text",
+		"id" : "mobile_hls_url",
+		"label" : "Mobile Streaming M3U3",
+		"info" : "Video M3U3 Streaming will take priority over other videos"
+	},
+	{
+		"type" : "checkbox",
+		"id" : "desktop_hls_centered",
+		"label" : "Centered + Content Width Desktop HLS Video",
+		"default" : true,
+		"info" : "Will Center / Keep HLS Video inside content block on large screens"
+	}
+  ],
+  "presets": [
+    {
+      "name": "Video",
+      "category": "Video",
+      "settings": {
+        "video_url": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"
+      }
+    }
+  ]
+}
+{% endschema %}

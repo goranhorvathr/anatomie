@@ -1,0 +1,33 @@
+<footer class="page-width">
+  {% if section.settings.footer_top != blank %}
+	<div class="lp-footer-top">
+      {{ section.settings.footer_top }}
+	</div>
+  {% endif %}
+  {% if section.settings.footer_bottom != blank %}
+	<div class="lp-footer-bottom">
+      {{ section.settings.footer_bottom }}
+	</div>
+  {% endif %}
+</footer>
+
+{% schema %}
+  {
+    "name": "Custom Footer",
+    "class": "custom-footer",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "footer_top",
+        "label": "Footer Top Content",
+        "default": "Footer Top Content"
+      },
+      {
+        "type": "textarea",
+        "id": "footer_bottom",
+        "label": "Footer Bottom Content",
+        "default": "Footer Bottom Content"
+      }
+    ]
+  }
+{% endschema %}

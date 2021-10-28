@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+
+    <title>{{ page_title }}</title>
+
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+  
+                <!-- Global-e CSS Start-->
+                <link id="GEPIStyles" rel="stylesheet" href="//gex.global-e.com/gempro/css/10000508" />
+                <!-- Global-e CSS End-->
+                {% include 'insider' with 'head' %}
+ </head>
+  <body>
+    {{ skip_to_content_link }}
+
+    <header class="banner" data-header role="banner">
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </header>
+
+    {{ order_summary_toggle }}
+    <div class="content" data-content>
+      <div class="wrap">
+        <div class="main">
+          <header class="main__header" role="banner">
+            {{ content_for_logo }}
+            {{ breadcrumb }}
+            {{ alternative_payment_methods }}
+          </header>
+          <main class="main__content" role="main">
+            {{ content_for_layout }}
+          </main>
+          <footer class="main__footer" role="contentinfo">
+            {{ content_for_footer }}
+          </footer>
+        </div>
+        <aside class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            {{ content_for_order_summary }}
+             <script src="https://cdn.shoppinggives.com/cc-utilities/shopify-cart.js?store-id=de271f12-e5bb-40c7-a682-4a7d64f1992d&template-type=1&target-element=.order-summary__section--discount&after=true"></script>
+            <style>.sg-widget { border-top: 1px solid rgba(175,175,175,0.34); padding-top: 15px; padding-bottom: 15px}</style>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    {{ tracking_code }}
+    
+    <script>
+    
+      (function($) {
+  		$(document).on("page:load page:change", function() {
+    		// Add your customizations
+      		{% for item in checkout.line_items %}
+      			{% if item.product.tags contains 'finalsale' %}
+          			console.log('FINAL SALE: {{ item.product.id }}');
+                                $('[data-product-id="{{ item.product.id }}"]').each(function(i) { 
+                                	
+                                    if($(this).children('.product__description').children('.order-summary__final-sale').length==0) {
+                    					$(this).children('.product__description').append('<span class="order-summary__small-text order-summary__final-sale">{{ 'products.product.final_sale' | t }}</span>');
+                    				}
+                                });
+                                
+                    
+        		{% endif %}
+      		{% endfor %}
+  	});
+	})(Checkout.$);
+    
+    
+    </script>
+  
+                <!-- Global-e Script Start-->
+                <script id="globaleScript">
+                  (function () {
+                    var reg = /showpro=(true|false)/i;
+                    var showpro = ((reg.exec(document.location.search) || reg.exec(document.cookie) || [])[1] || '').toLowerCase();
+                    var s = document.createElement('script');
+                    s.type = 'text/javascript';
+                    s.async = true;
+                    s.src = '//gex.global-e.com/gempro/get/10000508' + (showpro ? '?showpro=' + showpro : '');
+                    document.getElementsByTagName('head')[0].appendChild(s);
+
+                    if (showpro) {
+                        var cssElement = document.createElement('link');
+                        cssElement.rel = 'stylesheet';
+                        cssElement.id = 'GEPIStyles';
+                        cssElement.href = '//gex.global-e.com/gempro/css/10000508?showpro=' + showpro;
+                        document.cookie = 'showpro=' + showpro;
+                        document.getElementsByTagName('head')[0].appendChild(cssElement);  
+                    }
+
+                    //GlobalE_Gem_Data cookie
+                    var name = 'GlobalE_Gem_Data';
+                    var value = JSON.stringify({ StoreCode : 'anatomie-store' });
+                    var days = 10;
+
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days*24*60*60*1000));
+                    var expires = '; expires=' + date.toUTCString();
+                    document.cookie = name + ' = ' + (value || '')  + expires + '; path =/ ';
+                })()
+                </script>
+                {% if customer.id  %}
+                    <input type="hidden" name="customer_id" id="customer_id" value="{{ customer.id }}_{{ customer.id | append: "!#Gl0b@lE-$3cr3t!)%1#" | sha1 }}">
+                {% endif %}
+                <script>
+                    (function () {
+                      setTimeout(function() {
+                        if (typeof GEP == 'undefined') {
+                          var toDisplay = document.querySelectorAll('[globale-product-price],[globale-order-details-price],[globale-order-list-price]');
+                          toDisplay.forEach(function(i) {  i.style.visibility = 'visible'; });
+} else {
+                        }
+                      }, 2000);
+                    })()
+                  </script>
+                <!-- Global-e Script End-->
+                {% include 'insider' %} 
+    {% render 'extole' %}
+ </body>
+</html>
+
+<!-- Start: ShoppingGives Change Commerce Styles -->
+<style>
+.shoppinggives-tag.contained #sg-main-text .cc-shop-give {
+    display: none !important;
+}
+
+.shoppinggives-tag.contained #sg-main-text:before {
+    content: "Make a purchase. Make a difference.";
+    display: block !important;
+    font-weight: 700 !important;
+    margin-bottom: 4px !important;
+}
+  
+#sg-main-text {
+   	font-family: "Gotham",sans-serif !important;
+    font-size: 11px !important; 
+    font-weight: 300 !important;
+    font-style: normal !important;
+}
+
+.section--shipping-method .small-text {
+  display: none !important;
+}
+  .product__description .order-summary__small-text.order-summary__final-sale {
+    font-size: 10px;
+    color: red;
+    font-weight: 600;
+  }
+</style>
+<!-- End: ShoppingGives Change Commerce Styles -->

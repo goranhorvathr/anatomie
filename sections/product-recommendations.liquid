@@ -1,0 +1,156 @@
+{%- if section.settings.show_recommendations -%}
+  <div class="container row">
+    <div class="product-recommendations page-width" data-product-id="{{ product.id }}" data-limit="4">
+      <script type="application/template" data-next-button>
+      {% include 'featured-collection-next-button', color: '#000' %}
+      </script>
+      <script type="application/template" data-prev-button>
+      {% include 'featured-collection-previous-button', color: '#000' %}
+      </script>
+      {%- if recommendations.performed and recommendations.products_count > 0 -%}
+
+        {% comment %}<h4 class="text-center large-row">{{ section.settings.recommendations_title }}</h4>{% endcomment %}
+        <div class="related-products product-carousel-peek">
+          <div class="grid grid--uniform grid--uniform-row-gutters js-related-product-carousel overflowing-slider">
+            {%- for product in recommendations.products -%}
+              {% include 'product-block' %}
+            {%- endfor -%}
+          </div>
+          {%- include 'peek-carousel-advice' -%}
+        </div>
+
+      {%- endif -%}
+      <div class="scrollbar">
+        <div class="scrollbar-indicator"></div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+<style type="text/css">
+.js-related-product-carousel .slick-slide {
+  margin: 0 5px;
+}
+</style>
+
+<script type="text/javascript">
+  var loadProductRecommendationsIntoSection = function () {
+    // Look for an element with class 'product-recommendations'
+    var productRecommendationsSection = document.querySelector(".product-recommendations");
+    if (productRecommendationsSection === null) {
+      return;
+    }
+    // Read product id from data attribute
+    var productId = productRecommendationsSection.dataset.productId;
+    // Read limit from data attribute
+    var limit = productRecommendationsSection.dataset.limit;
+    // Build request URL
+    var requestUrl = "/recommendations/products?section_id=product-recommendations&limit=" + limit + "&product_id=" + productId;
+    // Create request and submit it using Ajax
+    var request = new XMLHttpRequest();
+    request.open("GET", requestUrl);
+    request.onload = function () {
+      if (request.status >= 200 && request.status < 300) {
+        var container = document.createElement("div");
+        container.innerHTML = request.response;
+        productRecommendationsSection.innerHTML = container.querySelector(".product-recommendations").innerHTML;
+
+        if (theme && theme.checkCurrency)
+          theme.checkCurrency();
+        theme.peekCarousel.init(productRecommendationsSection, $('.js-related-product-carousel', productRecommendationsSection), '.productRecommendations', function () {
+          if (window.lazyLoadInstance) {
+            window.lazyLoadInstance.update();
+          }
+          return true; /*$(window).width() < 768*/
+        }, false);
+        theme.initUniformHeightMonitor(productRecommendationsSection, '.product-block__image-container', '.product-block__image-container .image-one');
+
+        // Add event listener for left scroll
+        // Add event listener for left
+        $('.js-related-product-carousel', productRecommendationsSection).find('.slick-track').on('leftChanged', function (e) {
+          var elem = $(e.target);
+
+          if (elem.hasClass('slick-track')) {
+            var scrollbarParent = elem.closest('div.page-width').find('.scrollbar');
+            var scrollbarIndicator = scrollbarParent.find('.scrollbar-indicator');
+            var scrollbarPercentage = (scrollbarParent.width() / elem.width()) * 100;
+            var scrollX;
+
+            if (e.detail && e.detail.x) {
+              scrollX = parseFloat(e.detail.x.replace(/px/g, ''));
+            } else if (e.originalEvent.detail) {
+              scrollX = parseFloat(e.originalEvent.x.replace(/px/g, ''));
+            } else {
+              scrollX = 0;
+            }
+
+            if (scrollX < 0)
+              scrollX = Math.abs(scrollX);
+            else
+              scrollX = 0;
+
+            scrollX = (scrollX / elem.width()) * 100;
+
+            if (scrollbarIndicator.width() != ((scrollbarPercentage / 100) * scrollbarParent.width()))
+              scrollbarIndicator.css('width', scrollbarPercentage + '%');
+
+
+            var scrollbarWidth = scrollbarParent.width();
+            var scrollPercentage = (scrollX / 100) * scrollbarWidth;
+            var indicatorOffset = scrollbarIndicator.width() / 2;
+            var left = scrollPercentage; // - indicatorOffset;
+            scrollbarIndicator.css('transform', 'translate3d(' + left + 'px, 0, 0)');
+          }
+        });
+      }
+    };
+    request.send();
+  };
+
+  // Reload the section in the editor when a setting changes
+  document.addEventListener("shopify:section:load", function (event) {
+    if (event.detail.sectionId === "product-recommendations") {
+      loadProductRecommendationsIntoSection();
+    }
+  });
+
+  document.addEventListener("shopify:section:unload", function (event) {
+    if (event.detail.sectionId === "product-recommendations") {
+      theme.destroyUniformHeightMonitor($('.product-recommendations', event.target));
+      theme.peekCarousel.destroy(
+        $('.product-recommendations', event.target),
+        $('.js-related-product-carousel', event.target),
+        '.productRecommendations'
+      );
+    }
+  });
+
+  // Fetching the recommendations on page load
+  document.addEventListener('DOMContentLoaded', function () {
+    loadProductRecommendationsIntoSection();
+  });
+</script>
+
+{% javascript %}
+
+{% endjavascript %}
+
+{% schema %}
+  {
+    "name": "Product recommendations",
+    "settings": [
+      {
+        "type": "text",
+        "id": "recommendations_title",
+        "label": "Heading",
+        "default": "You may also like"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_recommendations",
+        "label": "Show recommendations",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

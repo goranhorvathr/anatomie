@@ -1,0 +1,19 @@
+<script type="text/javascript" src="{{ 'lazyload.min.js' | asset_url }}" defer></script>
+<script type="text/javascript">
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_error: function (el) {
+      console.log("Error:", el);
+    },
+    data_bg_multi: 'bgset',
+    threshold: 0
+  };
+  
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+</script>

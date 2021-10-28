@@ -1,0 +1,22 @@
+<div id="reviews-{{ section.id }}" class="page-width">
+  {% include 'judgeme_widgets', widget_type: 'judgeme_featured_carousel', concierge_install: true, auto_install: true %}
+</div>
+
+<style type="text/css">
+#reviews-{{ section.id }} .jdgm-carousel-wrapper {
+  width: 100%;
+}
+</style>
+
+{% schema %}
+{
+  "name": "Store Reviews",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Store Reviews Slider",
+      "category": "Review"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,50 @@
+{% include 'spurit_po2_section_snippet', product: all_products[section.settings.product2], products: null %}
+{% include 'spurit_po2_section_snippet', product: all_products[section.settings.product1], products: null %}
+<div class="page-width side-by-side-product{% unless section.settings.show_title_block  %} hide-title{% endunless %}">
+  {% for i in (1..2) %}
+    {% assign product_setting = 'product' | append: i %}
+    {% if section.settings[product_setting] != blank %}
+      {% assign product = all_products[section.settings[product_setting]] %}
+      {% assign quickbuy_toggle = settings.quickbuy_buttons_toggle %}
+      {% include 'product-block', quickbuy: quickbuy_toggle %}
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "Split Product Display",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "product",
+      "id": "product1",
+      "label": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product2",
+      "label": "Product 2"
+    },
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_block",
+      "label": "Show Title Block",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split Product Display",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

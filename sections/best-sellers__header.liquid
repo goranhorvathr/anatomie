@@ -1,0 +1,71 @@
+<header>
+  {% if section.settings.top_bar_text != blank %}
+	<div class="lp-header-top-bar" style="color: {{ section.settings.top_bar_color }}; background: {{ section.settings.top_bar_background }};">
+      {{ section.settings.top_bar_text }}
+	</div>
+  {% endif %}
+	<div class="lp-header-main page-width">
+		<div class="col one-third">
+		{{ section.settings.header_left }}
+		</div>
+		<div class="col one-third">
+		{{ section.settings.header_center }}
+		</div>
+		<div class="col one-third">
+		{{ section.settings.header_right }}
+		</div>
+	</div>
+</header>
+
+{% schema %}
+  {
+    "name": "Custom Header",
+    "class": "custom-header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Top Bar"
+      },
+      {
+        "type": "text",
+        "id": "top_bar_text",
+        "label": "Top Bar Text",
+        "default": "Promotional Message Goes Here"
+      },
+      {
+        "type": "color",
+        "id": "top_bar_color",
+        "label": "Top Bar Text Color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "top_bar_background",
+        "label": "Top Bar Background Color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Main Header"
+      },
+      {
+        "type": "textarea",
+        "id": "header_left",
+        "label": "Header Left Content",
+        "default": "Left Column Content"
+      },
+      {
+        "type": "textarea",
+        "id": "header_center",
+        "label": "Header Center Content",
+        "default": "Center Column Content"
+      },
+      {
+        "type": "textarea",
+        "id": "header_right",
+        "label": "Header right Content",
+        "default": "Right Column Content"
+      }
+    ]
+  }
+{% endschema %}

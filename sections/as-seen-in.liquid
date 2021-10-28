@@ -1,0 +1,54 @@
+<section class="featured-in" data-id="as-seen-in">
+	<div class="page-width text-center">
+		{% if section.settings.Title %}
+      	<h2 class="flex-heading">
+			{{ section.settings.Title }}
+			{% if section.settings.subTitle %}
+			<small>{{ section.settings.subTitle }}</small>
+			{% endif %}
+		</h2>
+        {% endif %}
+        
+        <div class="logo-array">
+            {% for block in section.blocks %}
+                {% if block.settings.brand_logo %}
+                <img src="{{ block.settings.brand_logo | img_url: 'x150' }}" alt="{{ block.settings.brand_logo.alt }}"/>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+      </div>
+</section>
+
+
+
+{% schema %}
+  {
+    "name": "As Seen In",
+    "settings": [
+	{
+		"type" : "text",
+		"label" : "Title",
+		"id" : "Title"
+	},
+	{
+		"type" : "text",
+		"label" : "SubText",
+		"id" : "subTitle"
+	}
+    ],
+    "blocks" : [
+        { 
+            "type" : "featured",
+            "name" : "brands",
+            "settings" : [
+                {
+                    "type" : "image_picker",
+                    "id" : "brand_logo",
+                    "label" : "Brand Logo"
+                }
+            ]
+        }
+    ]
+  }
+{% endschema %}

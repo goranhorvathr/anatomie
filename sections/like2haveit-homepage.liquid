@@ -1,0 +1,47 @@
+<section class="l2h--title" data-id="like2haveit-homepage">
+	<div class="page-width text-center">
+		{% if section.settings.Title %}
+      	<h2 class="flex-heading">
+			<span class="title-text">{{ section.settings.Title }}</span>
+			{% if section.settings.subTitle %}
+			<small>{{ section.settings.subTitle }}</small>
+			{% endif %}
+		</h2>
+		{% endif %}
+  	</div>
+
+{% if section.settings.l2h != blank %}
+	{{ section.settings.l2h }}
+{% endif %}
+</section>
+{% schema %}
+  {
+    "name": "Instagram Feed - HP",
+    "settings": [
+	{
+		"type" : "text",
+		"label" : "Like2HaveItFeed",
+		"id" :  "l2h"
+	},
+	{
+		"type" : "text",
+		"label" : "Title",
+		"id" : "Title"
+	},
+	{
+		"type" : "text",
+		"label" : "SubText",
+		"id" : "subTitle"
+	}
+]
+  }
+{% endschema %}
+
+{% stylesheet 'scss' %}
+
+
+
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

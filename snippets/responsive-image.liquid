@@ -1,0 +1,45 @@
+{%- if aspect_ratio -%}
+{%- assign cover = true -%}
+{%- else -%}
+{%- assign aspect_ratio = image.aspect_ratio -%}
+{%- assign cover = false -%}
+{%- endif -%}
+<div class="rimage-outer-wrapper" {% unless nomax %}style="max-width: {{ image.width }}px; max-height: {{ image.height }}px"{% endunless %}>
+  <div class="rimage-wrapper lazyload--placeholder" style="padding-top:{{ 1 | divided_by: aspect_ratio | times: 100 }}%">
+    {% if initial %}
+      <img class="rimage__image lazy fade-in {% if cover %}cover{% endif %}" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'/%3E" data-src="{{ image | img_url: initial }}">
+      {% assign initial = false %}
+    {% endif %}
+    {% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+    {% unless noimgtag %}
+      <img class="rimage__image lazy fade-in {% if cover %}cover{% endif %}"
+      src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'/%3E"
+      data-srcset="
+        {{ image | img_url: '180x' }} 180w,
+        {{ image | img_url: '220x' }} 220w,
+        {{ image | img_url: '300x' }} 300w,
+        {{ image | img_url: '360x' }} 360w,
+        {{ image | img_url: '460x' }} 460w,
+        {{ image | img_url: '540x' }} 540w,
+        {{ image | img_url: '720x' }} 720w,
+        {{ image | img_url: '900x' }} 900w,
+        {{ image | img_url: '1080x' }} 1080w,
+        {{ image | img_url: '1296x' }} 1296w,
+        {{ image | img_url: '1512x' }} 1512w,
+        {{ image | img_url: '1728x' }} 1728w,
+        {{ image | img_url: '2048x' }} 2048w"
+      data-widths="[180, 220, 300, 360, 460, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+      data-aspectratio="{{ image.aspect_ratio }}"
+      data-sizes="auto"
+      alt="{{ image.alt | escape }}"
+      {% if cover %}data-parent-fit="cover"{% endif %} {% if attributes %}{{ attributes }}{% endif %}>
+    {% endunless %}
+
+    <noscript>
+      {% assign img_url = image | img_url: '1024x1024' %}
+      <img src="{{ img_url }}" alt="{{ image.alt | escape }}" class="rimage__image">
+    </noscript>
+  </div>
+</div>
+{% assign aspect_ratio = false %}
+

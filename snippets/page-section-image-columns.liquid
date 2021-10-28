@@ -1,0 +1,41 @@
+<div class="image-with-columns">
+  {% if block.settings.title != blank %}
+  <h2 class="center">{{ block.settings.title }}</h2>
+  {% endif %}
+  <div class="images">
+
+    {% if block.settings.desktop_image contains '.gif' %}
+    
+      {{ block.settings.desktop_image | img_url: '3000x' | replace: '_3000x', '' | img_tag: '', 'desktop gif-img' }}
+      {% if block.settings.mobile_image != blank %}
+        {{ block.settings.mobile_image | img_url: '3000x' | replace: '_3000x', '' | img_tag: '', 'mobile gif-img' }}
+      {% else %}
+        {{ block.settings.desktop_image | img_url: '3000x' | replace: '_3000x', '' | img_tag: '', 'mobile gif-img' }}
+      {% endif %}
+
+
+    {% else %}
+      {{ block.settings.desktop_image | img_url: '1200x' | img_tag: '', 'desktop' }}
+      {% if block.settings.mobile_image != blank %}
+        {{ block.settings.mobile_image | img_url: '600x' | img_tag: '', 'mobile' }}
+      {% else %}
+        {{ block.settings.desktop_image | img_url: '600x' | img_tag: '', 'mobile' }}
+      {% endif %}
+    {% endif %}
+
+
+  
+  </div>
+  <div class="columns">
+    {% if block.settings.column1 != blank %}
+    <div class="column">
+      {{ block.settings.column1 }}
+    </div>
+    {% endif %}
+    {% if block.settings.column2 != blank %}
+    <div class="column">
+      {{ block.settings.column2 }}
+    </div>
+    {% endif %}
+  </div>
+</div>

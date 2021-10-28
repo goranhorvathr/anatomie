@@ -1,0 +1,80 @@
+{% if block.settings.image_desktop != blank %}
+<div class="header_slide">
+    {% if block.settings.title != blank %}
+    <div class="page-title {{ block.settings.text_color }} {{ block.settings.text_alignment }}">
+      <h2>{{ block.settings.title }}</h2>
+      {% if block.settings.subtitle != blank %}
+      <h3>{{ block.settings.subtitle }}</h3>
+      {% endif %}
+      {% if block.settings.paragraph_text != blank %}
+      <div class="paragraph_text">
+        {{ block.settings.paragraph_text }}
+      </div>
+      {% endif %}
+      {% if block.settings.link != blank %}
+      <a href="{{ block.settings.link }}" class="btn btn--small btn--secondary" style="display: inline-block; width: auto; max-width: fit-content;">
+        {{ block.settings.button_text }}
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
+    <img class="desktop_image" src="{{ block.settings.image_desktop | img_url: '2000x' }}" />
+    <img class="mobile_image" src="{% if block.settings.image_mobile != blank %}{{ block.settings.image_mobile | img_url: '600x' }}{% else %}{{ block.settings.image_desktop | img_url: '600x' }}
+    {% endif %}" />
+    <div class="overlaid-logos {{ block.settings.logo_position }}">
+      {% if block.settings.logo1 != blank or block.settings.logo1_filename != blank %}
+        {% if block.settings.logo1 != blank %}
+          {{ block.settings.logo1 | img_url: '500x' | img_tag: '', 'overlaid-logo' }}
+        {% else %}
+          {{ block.settings.logo1_filename | file_url | img_tag: '', 'overlaid-logo' }}
+        {% endif %}
+      {% endif %}
+      {% if block.settings.logo2 != blank or block.settings.logo2_filename != blank %}
+        {% if block.settings.logo2 != blank %}
+          {{ block.settings.logo2 | img_url: '500x' | img_tag: '', 'overlaid-logo' }}
+        {% else %}
+          {{ block.settings.logo2_filename | file_url | img_tag: '', 'overlaid-logo' }}
+        {% endif %}
+      {% endif %}
+    </div>
+</div>
+
+
+{% if block.settings.drop_mobile %}
+  <style>
+    @media screen and (max-width: 1200px) {
+    .header_slide {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .header_slide .page-title.left {
+      align-items: center;
+    }
+    .header_slide .page-title {
+      position: relative;
+      top: initial;
+      left: initial;
+      order: 2;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }}
+  </style>
+{% endif %}
+
+{% if block.settings.push_desktop != blank and block.settings.push_desktop > 0 %}
+  <style>
+    {% if block.settings.drop_mobile %}
+    @media screen and (min-width: 1200px) {
+    {% endif %}
+
+    .header_slide .page-title {
+      margin-left: {{block.settings.push_desktop}}px;
+    }
+
+    {% if block.settings.drop_mobile %}
+    }
+    {% endif %}
+    
+  </style>
+{% endif %}
+{% endif %}

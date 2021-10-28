@@ -1,0 +1,11 @@
+<div class="near-me__section">
+    {% for block in section.blocks %}
+    <div class="near-me__stylist-block" name="{{ block.settings.state }}">
+        <a href="{{ block.settings.page }}">
+            <img class="near-me__image" src="{{block.settings.portrait | img_url: 'medium' }}" alt="portrait of {{ block.settings.name }}" srcset="">
+        </a>
+        <p class="near-me__name">{{ block.settings.name }}</p>
+        <p class="near-me__location">{{ block.settings.city }}, {{ block.settings.state }}</p>
+    </div>
+    {% endfor %}
+</div>

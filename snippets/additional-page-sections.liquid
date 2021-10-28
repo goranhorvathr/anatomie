@@ -1,0 +1,108 @@
+{% assign header_slides = '' %}
+{% assign page_content = '' %}
+
+{% for block in section.blocks %}
+  {% case block.type %}
+    {% when 'header' %}
+      {% capture header_slide %}
+        {% include 'page-section-header-slide' %}
+      {% endcapture %}
+      {% assign page_content = page_content | append: header_slide %}
+    {% when 'header_slide' %}
+      {% capture header_slide %}
+        {% include 'page-section-header-slide' %}
+      {% endcapture %}
+      {% assign header_slides = header_slides | append: header_slide %}
+    {% when 'full_width_image' %}
+      {% capture full_width_image %}
+        {% include 'page-section-full-width-image' %}
+      {% endcapture %}
+      {% assign page_content = page_content | append: full_width_image %}
+    {% when 'full_width_text' %}
+      {% capture full_width_text %}
+        {% include 'page-section-full-width-text' %}
+      {% endcapture %}
+      {% assign page_content = page_content | append: full_width_text %}
+    {% when 'left_right_split' %}
+      {% capture left_right_split %}
+        {% include 'page-section-left-right-split' %}
+      {% endcapture %}
+      {% assign page_content = page_content | append: left_right_split %}
+    {% when 'left_right_video' %}
+      {% capture left_right_video %}
+        {% include 'page-section-left-right-video' %}
+      {% endcapture %}
+    {% assign page_content = page_content | append: left_right_video %}
+    {% when 'full_width_video' %}
+    {% capture video_section %}
+      {% include 'page-section-video' %}
+    {% endcapture %}
+	{% assign page_content = page_content | append: video_section %}
+    {% when 'video_banner' %}
+    {% capture video_section %}
+      {% include 'page-section-video-banner' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: video_section %}
+    {% when 'side_by_side_review' %}
+    {% capture reviews_section %}
+      {% include 'page-section-reviews' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: reviews_section %}
+    {% when 'image_two_columns' %}
+    {% capture image_columns_section %}
+      {% include 'page-section-image-columns' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: image_columns_section %}
+    {% when 'featured_collection' %}
+    {% capture featured_collection_section %}
+      {% include 'page-section-featured-collection' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: featured_collection_section %}
+    {% when 'primary_collection'%}
+      {% capture collection_data %}
+        {% include 'page-section-collection' %}
+      {% endcapture %}
+      {% assign page_content = page_content | append: collection_data %}
+    {% when 'full_width_button' %}
+    {% capture full_width_button %}
+      {% include 'page-section-header-button' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: full_width_button %}
+    {% when 'klaviyo_embed' %}
+    {% capture klaviyo_embed %}
+      {% include 'klaviyo-embed' %}
+    {% endcapture %}
+    {% assign page_content = page_content | append: klaviyo_embed %}
+    {% endcase %}
+{% endfor %}
+
+{% if header_slides.size > 0 %}
+<div class="header_slides">
+  <div class="slides-container">
+  {{ header_slides }}
+  </div>
+</div>
+
+<script type="text/javascript" src="{{ 'slick-custom.min.js' | asset_url }}" defer="defer"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function () {
+  $('.slides-container').slick({
+    arrows: true,
+    dots: true,
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000
+  });
+});
+</script>
+{% endif %}
+
+{% if section.settings.full_width %}
+{{ page_content }}
+{% else %}
+<div class="page-width">
+  {{ page_content }}
+</div>
+{% endif %}

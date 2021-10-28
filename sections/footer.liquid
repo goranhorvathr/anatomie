@@ -1,0 +1,365 @@
+<!--
+==================================================================================================================================
+
+
+
+==================================================================================================================================
+ -->
+<section class="page-footer {% if section.settings.sticky_footer %}page-footer--with-sticky-footer{% endif %}" data-section-id="{{ section.id }}" data-section-type="footer">
+    <div class="page-footer__inner {% if section.settings.sticky_footer %}sticky-footer{% endif %}">
+    <div class="container top-border">
+      {% if section.settings.show_subscribe_form %}
+          <div class="subscribe-form page-width">
+
+            <div class="flex-container">
+              <div class="subscription_title_text">
+                <div class="subscribe_form_title"><h4>{{section.settings.footer_subscribe_title}}</h4></div>
+                <div class="subscribe_form_subtitle"><p>{{section.settings.footer_subscribe_subtitle}}</p></div>
+              </div>
+            </div>
+            <div class="flex-container">
+              <form id="email_signup" class="contact-form klaviyo_gdpr_embed_{{ section.settings.klaviyo_form_id }}" action="//manage.kmail-lists.com/subscriptions/subscribe" data-ajax-submit="//manage.kmail-lists.com/ajax/subscriptions/subscribe" method="GET" target="_blank" novalidate="novalidate">
+                <input type="hidden" name="g" value="{{ section.settings.klaviyo_form_id }}">
+                <input type="hidden" name="$fields" value="$consent">
+                <input type="hidden" name="$list_fields" value="$consent">
+                <input type="hidden" name="$consent" id="consent-web" value="web">
+                <div class="subscribe-form__inputs">
+                  <div class="email_address">
+                    <div class="input-wrapper">
+                      <label class="subscribe-form__label" for="k_id_email">{{ section.settings.subscribe_label }}</label>
+                      <input type="email" required class="subscribe-form__email required" value="" id="k_id_email" name="email" />
+                    </div>
+                  </div>
+                  <div class="submit_button">
+                    <button class="btn btn--secondary subscribe-form__submit" type="submit">{{ section.settings.subscribe_button }}</button>
+                  </div>
+                </div>
+                <div class="klaviyo_messages">
+                  <div class="success_message" style="display:none;"></div>
+                  <div class="error_message" style="display:none;"></div>
+                </div>
+              </form>
+            </div>
+              <script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+              <script type="text/javascript">
+                KlaviyoSubscribe.attachToForms('#email_signup', {
+                  hide_form_on_success: true,
+                  extra_properties: {
+                    $source: '$embed',
+                    $method_type: "Klaviyo Form",
+                    $method_id: 'embed',
+                    $consent_version: 'Embed default text'
+                  },
+                  success: function ($form) {
+                    $form.find('.subscribe-form__inputs').css('display', 'none');
+                  }
+                });
+              </script>
+            </div>
+        {% endif %}
+      <div class="page-width">
+
+
+
+
+        <nav class="footer-navigation {% if section.settings.show_social_icons == true %}grid{% endif %}">
+          {%- assign footer_linklist = section.settings.footer_linklist -%}
+          {% if linklists[footer_linklist].links.size > 0 %}
+            <div class="{% if section.settings.show_social_icons %}grid__item ten-twelfths small-down--one-whole{% endif %}">
+              {%- assign has_dropdowns = false -%}
+              {%- for link in linklists[footer_linklist].links -%}
+                {%- if link.links != empty -%}
+                  {%- assign has_dropdowns = true -%}
+                {%- endif -%}
+              {%- endfor -%}
+              <ul class="nav footer-nav footer-nav--{% if has_dropdowns %}dropdowns grid{% else %}inline{% endif %}">
+                {% for link in linklists[footer_linklist].links %}
+                  {%- assign child_list_handle = link.title | handleize -%}
+                  {% if menus[child_list_handle].links != blank %}
+                    <li class="nav__item footer-nav__item footer-nav--has-submenu {% if link.active %}footer-nav--active{% endif %} grid__item small-down--one-whole {% if section.settings.show_social_icons == true %} one-quarter{% else %} one-quarter{% endif %}">
+                      <a href="javascript:void(0);" class="nav__link footer-nav__link footer-nav__link--top footer-not-alink">
+                        {{ link.title }}
+                      </a>
+                      <ul class="footer-nav__submenu">
+                        {% for childlink in menus[child_list_handle].links %}
+                          <li {% if childlink.active %}class="footer-nav--active"{% endif %}>
+                            <a href="{{ childlink.url }}" class=" nav__link footer-nav__link footer-nav__link--sub">{{ childlink.title | escape }}</a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </li>
+                  {% else %}
+                    <li class="nav__item footer-nav__item {% if link.active %}footer-nav--active{% endif %} {% if has_dropdowns %}grid__item small-down--one-whole {% if section.settings.show_social_icons == true %} one-quarter{% else %} one-quarter{% endif %}{% endif %}">
+                      <a href="{{ link.url }}" class="nav__link footer-nav__link footer-nav__link--top">{{ link.title }}</a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+
+
+          <div class="follow_us">
+            {% if section.settings.show_social_icons %}
+              <div class="footer-social-icons">
+                <p class="footer-social-icons__title">{{ 'layout.footer.social_title' | t }}</p>
+                <div class="footer-social_icons__ two-twelfths">
+                <a href="{{ settings.social_instagram_url }}" target="_blank"> {% include 'icon-instagram'  %} </a>
+                <a href="{{ settings.social_facebook_url }}" target="_blank"> {% include 'icon-facebook'  %} </a>
+                <a href="{{ settings.social_pinterest_url }}" target="_blank"> {% include 'icon-pinterest'  %} </a>
+                </div>
+
+				<!--   MOBILE  -->
+                <div class="footer-social_icons__Mobile">
+                <a href="{{ settings.social_instagram_url }}" target="_blank"> {% include 'icon-instagram'  %} </a>
+                <a href="{{ settings.social_facebook_url }}" target="_blank"> {% include 'icon-facebook'  %} </a>
+                <a href="{{ settings.social_pinterest_url }}" target="_blank"> {% include 'icon-pinterest'  %} </a>
+                </div>
+              </div>
+            {% endif %}
+
+          {% endif %}
+
+            <div>
+              {%- assign small_linklist = section.settings.small_linklist -%}
+              {% if linklists[small_linklist].links.size > 0 %}
+                <ul class="small-nav">
+                  {% for link in linklists[small_linklist].links %}
+                    <li class="small-nav__item">
+                      <a class="small-nav__link" href="{{ link.url }}">{{ link.title }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+
+              <small class="copyright-text">
+
+               {{ 'layout.footer.copyright' | t }}  {{ 'now' | date: "%Y" }} {{ shop.name | link_to: '/' }}
+  {%comment%}
+                {{ powered_by_link }}
+  {%endcomment%}
+
+              </small>
+            </div>
+          </div>
+
+        </nav>
+
+
+
+        <footer class="footer_class">
+          {%if section.settings.sec_btn == 'black'%}
+            <a class="sec_icon" href="https://www.shopify.com/pci-compliant/?utm_source=secure&amp;utm_medium=shop" title="This online store is secured by Shopify" target="_blank" rel="nofollow">
+            	{%include 'icon-security'%}
+            </a>
+          {%else%}
+            <a class="sec_icon" href="https://www.shopify.com/pci-compliant/?utm_source=secure&amp;utm_medium=shop" title="This online store is secured by Shopify" target="_blank" rel="nofollow">
+              {%include 'icon-security-white'%}
+            </a>
+          {%endif%}
+
+          <div class="contact_info">
+            <div>
+              <a class="contact_field small_icon" href="mailto:{{ section.settings.store_email }}">
+                {% include 'icon-email' %}
+                EMAIL
+              </a>
+            </div>
+            <div>
+              <a class="contact_field fill_black" href="tel:{{ section.settings.store_phone }}">
+                {% include 'icon-phone-svg' %}
+                CONTACT {{ section.settings.store_phone }}
+              </a>
+            </div>
+          </div>
+        </footer>
+
+        <footer class="footer_class_mobile">
+          <div class="contact_info">
+            {% comment %}
+            <span><a class="no_decoration" href="tel:{{section.settings.store_phone}}"><div class="footer_phone_icon">{%include 'icon-phone-svg'%}</div></a></span>
+            <span class="email_text">CONTACT <a class="no_decoration" href="tel:{{section.settings.store_phone}}">{{section.settings.store_phone}}</a></span>
+            <span>EMAIL</span>
+            <span> <a href="mailto:{{section.settings.store_email}}"> {%include 'icon-email'%}</a></span>
+            {% endcomment %}
+            <div>
+              <a class="contact_field small_icon" href="mailto:{{ section.settings.store_email }}">
+                {% include 'icon-email' %}
+                {{ section.settings.store_email }}
+              </a>
+            </div>
+            <div>
+              <a class="contact_field fill_black" href="tel:{{ section.settings.store_phone }}">
+                {% include 'icon-phone-svg' %}
+                CONTACT {{ section.settings.store_phone }}
+              </a>
+            </div>
+          </div>
+
+
+          {%if section.settings.sec_btn == 'black'%}
+            <a class="sec_icon" href="https://www.shopify.com/pci-compliant/?utm_source=secure&amp;utm_medium=shop" title="This online store is secured by Shopify" target="_blank" rel="nofollow">
+            	{%include 'icon-security'%}
+            </a>
+          {%else%}
+            <a class="sec_icon" href="https://www.shopify.com/pci-compliant/?utm_source=secure&amp;utm_medium=shop" title="This online store is secured by Shopify" target="_blank" rel="nofollow">
+              {%include 'icon-security-white'%}
+            </a>
+          {%endif%}
+
+        </footer>
+
+        <small class="copyright-text-mobile">
+
+             {{ 'layout.footer.copyright' | t }}  {{ 'now' | date: "%Y" }} {{ shop.name | link_to: '/' }}
+{%comment%}
+              {{ powered_by_link }}
+{%endcomment%}
+
+            </small>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(){
+    var menus = $('.footer-nav__link--top');
+    var subMenus = $('.footer-nav__submenu');
+    for(let i = 0; i < menus.length; ++i){
+      	$(menus[i]).addClass("bold_footer_title");
+      $(menus[i]).click(function(e){
+
+        if($(subMenus).hasClass('open')){
+        	$(subMenus[i]).removeClass('open');
+        }else{
+          $(subMenus[i]).addClass('open');
+        }
+      });
+	};
+  });
+</script>
+
+{% schema %}
+  {
+    "name": "Footer",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "footer_linklist",
+        "label": "Primary menu",
+        "default": "footer",
+        "info": "This menu shows dropdown items in columns"
+      },
+      {
+        "type": "link_list",
+        "id": "small_linklist",
+        "label": "Secondary menu",
+        "info": "This menu won't show dropdown items"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_social_icons",
+        "label": "Show social media icons",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment_icons",
+        "label": "Show payment icons",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sticky_footer",
+        "label": "Enable scroll-reveal effect",
+        "default": false,
+        "info": "Only shown on desktop screens"
+      },
+      {
+        "type": "header",
+        "content": "Newsletter"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_subscribe_form",
+        "label": "Show newsletter signup",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "footer_subscribe_title",
+        "label": "Heading",
+        "default": "BECOME AN INSIDER"
+      },
+      {
+        "type": "text",
+        "id": "footer_subscribe_subtitle",
+        "label": "Heading",
+        "default": "Get 15% Off Your First Order"
+      },
+      {
+        "type": "text",
+        "id": "subscribe_title",
+        "label": "Heading",
+        "default": "Get updates"
+      },
+      {
+        "type": "text",
+        "id": "subscribe_label",
+        "label": "Label",
+        "default": "Email address"
+      },
+      {
+        "type": "text",
+        "id": "subscribe_button",
+        "label": "Submit button text",
+        "default": "Sign up"
+      },
+      {
+        "type": "richtext",
+        "id": "subscribe_description",
+        "label": "Subheading"
+      },
+      {
+        "type": "text",
+        "id": "store_phone",
+        "label": "phone number"
+      },
+      {
+        "type": "text",
+        "id": "store_email",
+        "label": "email"
+      },
+      {
+        "type": "select",
+        "id": "sec_btn",
+        "label": "Security Button",
+        "options": [
+         {
+           "group": "black",
+           "value": "black",
+           "label": "Black"
+         },
+		     {
+           "group": "white",
+           "value": "white",
+           "label": "White"
+     	   }
+        ],
+        "default": "black"
+      },
+      {
+        "type": "header",
+        "content": "Klaviyo Information"
+      },
+      {
+        "type": "text",
+        "id": "klaviyo_form_id",
+        "label": "Form ID",
+        "default": "JeVHjA"
+      }
+    ]
+  }
+
+{% endschema %}

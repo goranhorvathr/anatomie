@@ -1,0 +1,762 @@
+<style>
+    {% for block in section.blocks %}
+      {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+      .section-{{ section.id }}.split-image-section .block-{{ current }} .overlay {
+        top: {{ block.settings.overlay_position_y }}%;
+        left: {{ block.settings.overlay_position_x }}%;
+      }
+      .section-{{ section.id }}.split-image-section .block-{{ current }} .image-product-label {
+        top: {{ block.settings.label_position_y }}%;
+        left: {{ block.settings.label_position_x }}%;
+      }
+      .section-{{ section.id }}.split-image-section .block-{{ current }} .image-product-label-two {
+        top: {{ block.settings.label_position_y_two }}%;
+        left: {{ block.settings.label_position_x_two }}%;
+      }
+      .section-{{ section.id }}.split-image-section .block-{{ current }} .image-product-label-three {
+        top: {{ block.settings.label_position_y_three }}%;
+        left: {{ block.settings.label_position_x_three }}%;
+      }
+    {% endfor %}
+  </style>
+  {{ 'hls.js' | asset_url | script_tag }}
+  <section class="container container--no-mobile-padding large-row split-image-section section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="split-image">
+    <div class="page-width">
+      <div class="grid flex">
+        {% for block in section.blocks %}
+          {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+          {% case block.type %}
+            {% when 'image' %}
+              <div class="grid__item one-half small-down--one-whole block-{{ current }}" {{ block.shopify_attributes }}>
+                <div class="relative avoid-overlaps global-border-radius split-image__content-container">
+                  <div class="avoid-overlaps__mobile-container">
+                    {% if block.settings.image_link != blank %}<a href="{{ block.settings.image_link }}">{% endif %}
+                    {% if block.settings.image == blank %}
+                      <div class="split-image">
+                        {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                      </div>
+                    {% else %}
+                      <div class="split-image split-image-{{ current }} {% if section.settings.aspect_ratio == 'portrait' %} split-image--portrait{% else %} split-image--square{% endif %} rimage-background fade-in lazy"
+                          data-bg="{{ block.settings.image | img_url: 'master' }}"
+                          data-sizes="auto"
+                          data-parent-fit="cover">
+                        <noscript>
+                          <img src="{{ block.settings.image | img_url: '1024x1024' }}" alt="{{ block.settings.image.alt | escape }}" class="rimage-background__image">
+                        </noscript>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.image_link != blank %}</a>{% endif %}
+
+                    {% if block.settings.product_id != blank %}
+                      {% assign product_label = all_products[block.settings.product_id] %}
+                      {% capture current_number %}{{ current }}{% endcapture %}
+                      {% assign quickbuy_toggle = settings.quickbuy_labels_toggle %}
+                      {% include 'image-product-label',
+                                css_class: 'image-product-label',
+                                show_chevron: block.settings.show_chevron,
+                                chevron: block.settings.chevron_position,
+                                quickbuy: quickbuy_toggle,
+                                color_bg: block.settings.color_label_background,
+                                color_text: block.settings.color_label_text %}
+                    {% endif %}
+                    {% if block.settings.product_id_two != blank %}
+                      {% assign product_label = all_products[block.settings.product_id_two] %}
+                      {% capture current_number %}{{ current }}{% endcapture %}
+                      {% assign quickbuy_toggle = settings.quickbuy_labels_toggle %}
+                      {% include 'image-product-label',
+                                css_class: 'image-product-label image-product-label-two',
+                                show_chevron: block.settings.show_chevron_two,
+                                chevron: block.settings.chevron_position_two,
+                                quickbuy: quickbuy_toggle,
+                                color_bg: block.settings.color_label_background_two,
+                                color_text: block.settings.color_label_text_two %}
+                    {% endif %}
+                    {% if block.settings.product_id_three != blank %}
+                    {% assign product_label = all_products[block.settings.product_id_three] %}
+                    {% capture current_number %}{{ current }}{% endcapture %}
+                    {% assign quickbuy_toggle = settings.quickbuy_labels_toggle %}
+                    {% include 'image-product-label',
+                              css_class: 'image-product-label image-product-label-three',
+                              show_chevron: block.settings.show_chevron_three,
+                              chevron: block.settings.chevron_position_three,
+                              quickbuy: quickbuy_toggle,
+                              color_bg: block.settings.color_label_background_three,
+                              color_text: block.settings.color_label_text_three %}
+                    {% endif %}
+                  </div>
+
+                  {% include 'image-overlay',
+                    background_color: block.settings.color_overlay_background,
+                    text_color: block.settings.color_overlay_text,
+                    title: block.settings.overlay_title,
+                    url: block.settings.overlay_url,
+                    url_text: block.settings.overlay_url_text,
+                    url_style: block.settings.overlay_url_style,
+                    ignoreJS: true %}
+                </div>
+              </div>
+            {% when 'video' %}
+              <div class="grid__item one-half small-down--one-whole block-{{ current }}" {{ block.shopify_attributes }}>
+                <div class="relative avoid-overlaps global-border-radius split-image__content-container">
+                  <div class="avoid-overlaps__mobile-container">
+                    {% if block.settings.video_url == blank %}
+                      <div class="split-image">
+                        {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                      </div>
+                    {% else %}
+                      <div class="hls_video{% if section.settings.aspect_ratio == 'portrait' %} portrait{% else %} square{% endif %}" data-url="{{ block.settings.video_url }}">
+                        <video loop{% if block.settings.autoplay %} autoplay{% endif %} muted playsinline></video>
+                        {% unless block.settings.autoplay %}
+                          <button class="play_button">
+                            {% render 'icon-play' %}
+                          </button>
+                        {% endunless %}
+                      </div>
+                    {% endif %}
+
+                    {% if block.settings.product_id != blank %}
+                      {% assign product_label = all_products[block.settings.product_id] %}
+                      {% capture current_number %}{{ current }}{% endcapture %}
+                      {% assign quickbuy_toggle = settings.quickbuy_labels_toggle %}
+                      {% include 'image-product-label',
+                                css_class: 'image-product-label',
+                                show_chevron: block.settings.show_chevron,
+                                chevron: block.settings.chevron_position,
+                                quickbuy: quickbuy_toggle,
+                                color_bg: block.settings.color_label_background,
+                                color_text: block.settings.color_label_text %}
+                    {% endif %}
+                    {% if block.settings.product_id_two != blank %}
+                      {% assign product_label = all_products[block.settings.product_id_two] %}
+                      {% capture current_number %}{{ current }}{% endcapture %}
+                      {% assign quickbuy_toggle = settings.quickbuy_labels_toggle %}
+                      {% include 'image-product-label',
+                                css_class: 'image-product-label image-product-label-two',
+                                show_chevron: block.settings.show_chevron_two,
+                                chevron: block.settings.chevron_position_two,
+                                quickbuy: quickbuy_toggle,
+                                color_bg: block.settings.color_label_background_two,
+                                color_text: block.settings.color_label_text_two %}
+                    {% endif %}
+                    {% if block.settings.product_id_three != blank %}
+                    {% assign product_label = all_products[block.settings.product_id_three] %}
+                    {% capture current_number %}{{ current }}{% endcapture %}
+                    {% assign quickbuy_toggle = settings.quickbuy_labels_toggle %}
+                    {% include 'image-product-label',
+                              css_class: 'image-product-label image-product-label-three',
+                              show_chevron: block.settings.show_chevron_three,
+                              chevron: block.settings.chevron_position_three,
+                              quickbuy: quickbuy_toggle,
+                              color_bg: block.settings.color_label_background_three,
+                              color_text: block.settings.color_label_text_three %}
+                    {% endif %}
+                  </div>
+
+                  {% include 'image-overlay',
+                    background_color: block.settings.color_overlay_background,
+                    text_color: block.settings.color_overlay_text,
+                    title: block.settings.overlay_title,
+                    url: block.settings.overlay_url,
+                    url_text: block.settings.overlay_url_text,
+                    url_style: block.settings.overlay_url_style,
+                    ignoreJS: true %}
+                </div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function (e) {
+    var hlsVideos = document.querySelectorAll('.hls_video[data-url]:not(.loaded)');
+    hlsVideos.forEach(function (video) {
+      var videoElement = video.querySelector('video');
+      var videoUrl = video.getAttribute('data-url');
+      var playButton = video.querySelector('.play_button');
+      if (Hls.isSupported()) {
+        loadVideoViaHLS(videoUrl, videoElement);
+       } else {
+        loadVideoViaSupportedHLS(videoUrl, videoElement);
+       }
+       if (playButton) {
+        playButton.addEventListener('click', function (e) {
+          var element = e.currentTarget;
+          var wrapper = element.closest('.hls_video');
+          var video = wrapper.querySelector('video');
+          
+          element.classList.add('hidden');
+          video.play();
+        });
+       }
+    });
+  });
+  
+  function loadVideoViaHLS(videoFile, video) {
+    //if (!video.paused) { video.pause(); }
+    var hls = new Hls();
+    hls.loadLevel = 2;
+    
+    
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+      hls.loadSource(videoFile);
+      hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+        hls.startLevel = (hls.levels.length - 1);
+      });
+    });
+  }
+  
+  function loadVideoViaSupportedHLS(videoFile, video) {
+  	video.src = videoFile;
+  }
+</script>
+
+{% schema %}
+  {
+    "name": "Split image/video",
+    "max_blocks": 2,
+    "settings": [
+      {
+        "type": "radio",
+        "id": "aspect_ratio",
+        "label": "Image shape",
+        "options": [
+          { "value": "portrait", "label": "Portrait" },
+          { "value": "square", "label": "Square" }
+        ],
+        "default": "portrait"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "url",
+            "id": "image_link",
+            "label": "Image link"
+          },
+          {
+            "type": "header",
+            "content": "Overlay"
+          },
+          {
+            "type": "color",
+            "id": "color_overlay_background",
+            "label": "Background color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_overlay_text",
+            "label": "Text color",
+            "default": "#333333"
+          },
+          {
+            "type": "text",
+            "id": "overlay_title",
+            "label": "Heading",
+            "default": "Split image"
+          },
+          {
+            "type": "text",
+            "id": "overlay_url_text",
+            "label": "Button text"
+          },
+          {
+            "type": "url",
+            "id": "overlay_url",
+            "label": "Button link"
+          },
+          {
+            "type": "radio",
+            "id": "overlay_url_style",
+            "label": "Button style",
+            "options": [
+              { "value": "button_1", "label": "Button - primary" },
+              { "value": "button_2", "label": "Button - secondary" },
+              { "value": "link_style", "label": "Link"}
+            ],
+            "default": "button_1"
+          },
+          {
+            "type": "range",
+            "id": "overlay_position_x",
+            "label": "Horizontal position",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 50
+          },
+          {
+            "type": "range",
+            "id": "overlay_position_y",
+            "label": "Vertical position",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 80
+          },
+          {
+            "type": "header",
+            "content": "Product label"
+          },
+          {
+            "type": "color",
+            "id": "color_label_background",
+            "label": "Background color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_label_text",
+            "label": "Text color",
+            "default": "#333333"
+          },
+          {
+            "type": "product",
+            "id": "product_id",
+            "label": "Product"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_chevron",
+            "label": "Show arrow",
+            "default": true
+          },
+          {
+            "type": "radio",
+            "id": "chevron_position",
+            "label": "Arrow position",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "right", "label": "Right" }
+            ],
+            "default": "right"
+          },
+          {
+            "type": "range",
+            "id": "label_position_x",
+            "label": "Horizontal position",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          },
+          {
+            "type": "range",
+            "id": "label_position_y",
+            "label": "Vertical position",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          },
+          {
+            "type": "header",
+            "content": "Product label 2"
+          },
+          {
+            "type": "color",
+            "id": "color_label_background_two",
+            "label": "Background color 2",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_label_text_two",
+            "label": "Text color 2",
+            "default": "#333333"
+          },
+          {
+            "type": "product",
+            "id": "product_id_two",
+            "label": "Product 2"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_chevron_two",
+            "label": "Show arrow 2",
+            "default": true
+          },
+          {
+            "type": "radio",
+            "id": "chevron_position_two",
+            "label": "Arrow position 2",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "right", "label": "Right" }
+            ],
+            "default": "right"
+          },
+          {
+            "type": "range",
+            "id": "label_position_x_two",
+            "label": "Horizontal position 2",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          },
+          {
+            "type": "range",
+            "id": "label_position_y_two",
+            "label": "Vertical position 2",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          },
+          {
+            "type": "header",
+            "content": "Product label 3"
+          },
+          {
+            "type": "color",
+            "id": "color_label_background_three",
+            "label": "Background color three",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_label_text_three",
+            "label": "Text color 3",
+            "default": "#333333"
+          },
+          {
+            "type": "product",
+            "id": "product_id_three",
+            "label": "Product 3"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_chevron_three",
+            "label": "Show arrow 3",
+            "default": true
+          },
+          {
+            "type": "radio",
+            "id": "chevron_position_three",
+            "label": "Arrow position 3",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "right", "label": "Right" }
+            ],
+            "default": "right"
+          },
+          {
+            "type": "range",
+            "id": "label_position_x_three",
+            "label": "Horizontal position 3",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          },
+          {
+            "type": "range",
+            "id": "label_position_y_three",
+            "label": "Vertical position 3",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          }
+        ]
+      },
+      {
+        "type": "video",
+        "name": "Video",
+        "settings": [
+          {
+            "type": "text",
+            "id": "video_url",
+            "label": "Video M3U8 URL"
+          },
+          {
+            "type": "checkbox",
+            "id": "autoplay",
+            "label": "Autoplay",
+            "default": true
+          },
+          {
+            "type": "header",
+            "content": "Overlay"
+          },
+          {
+            "type": "color",
+            "id": "color_overlay_background",
+            "label": "Background color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_overlay_text",
+            "label": "Text color",
+            "default": "#333333"
+          },
+          {
+            "type": "text",
+            "id": "overlay_title",
+            "label": "Heading",
+            "default": "Split image"
+          },
+          {
+            "type": "text",
+            "id": "overlay_url_text",
+            "label": "Button text"
+          },
+          {
+            "type": "url",
+            "id": "overlay_url",
+            "label": "Button link"
+          },
+          {
+            "type": "radio",
+            "id": "overlay_url_style",
+            "label": "Button style",
+            "options": [
+              { "value": "button_1", "label": "Button - primary" },
+              { "value": "button_2", "label": "Button - secondary" },
+              { "value": "link_style", "label": "Link"}
+            ],
+            "default": "button_1"
+          },
+          {
+            "type": "range",
+            "id": "overlay_position_x",
+            "label": "Horizontal position",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 50
+          },
+          {
+            "type": "range",
+            "id": "overlay_position_y",
+            "label": "Vertical position",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 80
+          },
+          {
+            "type": "header",
+            "content": "Product label"
+          },
+          {
+            "type": "color",
+            "id": "color_label_background",
+            "label": "Background color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_label_text",
+            "label": "Text color",
+            "default": "#333333"
+          },
+          {
+            "type": "product",
+            "id": "product_id",
+            "label": "Product"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_chevron",
+            "label": "Show arrow",
+            "default": true
+          },
+          {
+            "type": "radio",
+            "id": "chevron_position",
+            "label": "Arrow position",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "right", "label": "Right" }
+            ],
+            "default": "right"
+          },
+          {
+            "type": "range",
+            "id": "label_position_x",
+            "label": "Horizontal position",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          },
+          {
+            "type": "range",
+            "id": "label_position_y",
+            "label": "Vertical position",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          },
+          {
+            "type": "header",
+            "content": "Product label 2"
+          },
+          {
+            "type": "color",
+            "id": "color_label_background_two",
+            "label": "Background color 2",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_label_text_two",
+            "label": "Text color 2",
+            "default": "#333333"
+          },
+          {
+            "type": "product",
+            "id": "product_id_two",
+            "label": "Product 2"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_chevron_two",
+            "label": "Show arrow 2",
+            "default": true
+          },
+          {
+            "type": "radio",
+            "id": "chevron_position_two",
+            "label": "Arrow position 2",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "right", "label": "Right" }
+            ],
+            "default": "right"
+          },
+          {
+            "type": "range",
+            "id": "label_position_x_two",
+            "label": "Horizontal position 2",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          },
+          {
+            "type": "range",
+            "id": "label_position_y_two",
+            "label": "Vertical position 2",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          },
+          {
+            "type": "header",
+            "content": "Product label 3"
+          },
+          {
+            "type": "color",
+            "id": "color_label_background_three",
+            "label": "Background color three",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_label_text_three",
+            "label": "Text color 3",
+            "default": "#333333"
+          },
+          {
+            "type": "product",
+            "id": "product_id_three",
+            "label": "Product 3"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_chevron_three",
+            "label": "Show arrow 3",
+            "default": true
+          },
+          {
+            "type": "radio",
+            "id": "chevron_position_three",
+            "label": "Arrow position 3",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "right", "label": "Right" }
+            ],
+            "default": "right"
+          },
+          {
+            "type": "range",
+            "id": "label_position_x_three",
+            "label": "Horizontal position 3",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          },
+          {
+            "type": "range",
+            "id": "label_position_y_three",
+            "label": "Vertical position 3",
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "step": 1,
+            "default": 20
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Split image/video",
+        "category": "Video",
+        "blocks": [
+          {
+            "type": "image",
+            "settings": {
+              "overlay_position_x": 50,
+              "overlay_position_y": 80,
+              "label_position_x": 20,
+              "label_position_y": 20
+            }
+          },
+          {
+            "type": "image",
+            "settings": {
+              "overlay_position_x": 50,
+              "overlay_position_y": 20,
+              "label_position_x": 80,
+              "label_position_y": 80
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

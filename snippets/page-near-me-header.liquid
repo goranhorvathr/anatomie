@@ -1,0 +1,76 @@
+<div class="near-me__header">
+    <div class="near-me__box">
+        <h1>{{page.title}}</h1>
+        <h2>Filter By State</h2>
+        <div class="near-me__dropdown-container">
+            <div onclick="openDropdown()" class="near-me__dropdown-button" id="near-me__button">State<span>&#8964;</span></div>
+            <div class="near-me__dropdown-content" id="near-me__dropdown-content">
+                <div>
+                    <input type="checkbox" name="location" id="FL"><span>Florida</span>
+                </div>
+                <div>
+                    <input type="checkbox" name="location" id="GA"><span>Georgia</span>
+                </div>
+                <div>
+                    <input type="checkbox" name="location" id="NY"><span>New York</span>
+                </div>
+                <div>
+                    <input type="checkbox" name="location" id="NJ"><span>New Jersey</span>
+                </div>
+                <div>
+                    <input type="checkbox" name="location" id="OH"><span>Ohio</span>
+                </div>
+                <div>
+                    <input type="checkbox" name="location" id="TN"><span>Tenessee</span>
+                </div>
+                <div>
+                    <input type="checkbox" name="location" id="TX"><span>Texas</span>
+                </div>
+                <div class="near-me__apply" onclick="filterStylists()">Apply</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .near-me__header {
+        background-image: url({{section.settings.header | img_url: 'master'}});
+    }
+</style>
+
+<script>
+    function openDropdown() {
+        document.getElementById("near-me__dropdown-content").classList.toggle("near-me__show");
+    }
+
+    function showAll() {
+        document.getElementsByName("location");
+        $(".near-me__stylist-block").show();
+    }
+
+    function showSelected() {
+        $(".near-me__stylist-block").hide()
+        let checkboxes = document.getElementsByName("location");
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked == true ) {
+                $(`div[name ="${checkboxes[i].getAttribute("id")}"]`).show()
+            }
+        }
+    }
+
+    function filterStylists() {
+        let checkboxes = document.getElementsByName("location");
+        let falseCheck = false;
+        for (let i = 0; i < checkboxes.length; i++) {
+            falseCheck = checkboxes[i].checked;
+            if (falseCheck == true) {
+                showSelected();
+                break;
+            } else {
+                showAll()
+            }
+        }
+        
+        openDropdown()
+    }
+</script>

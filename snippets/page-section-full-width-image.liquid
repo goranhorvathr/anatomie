@@ -1,0 +1,15 @@
+{% if block.settings.image != blank %}
+<div class="full-width-image">
+  {% if block.settings.title != blank %}
+  <h2 class="center">{{ block.settings.title }}</h2>
+  {% endif %}
+  <a{% if block.settings.link != blank %} href="{{ block.settings.link }}"{% endif %} style="background-color: {{ block.settings.background_color }}">
+    {% if block.settings.mobile_image != blank %}  
+    <img src="{{ block.settings.image | img_url: '2000x' }}" class="desktop-image" />
+    <img src="{{ block.settings.mobile_image | img_url: '700x' }}" class="mobile-image" />
+    {% else %}
+    <img src="{{ block.settings.image | img_url: '2000x' }}" />
+    {% endif %}
+  </a>
+</div>
+{% endif %}

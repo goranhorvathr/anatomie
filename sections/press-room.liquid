@@ -1,0 +1,115 @@
+<section class="press-room-page-section">
+  <div style="position:relative;">
+    <div style="width:100%;text-align:center;">
+      <div class="header_slide" style="background-image:url('{{ section.settings.press_room_header_img | img_url: '2000x' }}');
+        background-position:top;">
+        <div class="page-width" style="padding-top:150px;">
+          <div class="press-room-page-section-container" style="width:100%;">
+            {% if section.settings.press_room_page_title != blank %}
+              <h1 class="press-room-page-title">{{ section.settings.press_room_page_title }}</h1>
+            {% endif %}
+            {% if section.settings.press_room_page_description != blank %}
+              <div class="press-room-page-description">{{ section.settings.press_room_page_description }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-width press-room-page-section-container">
+    {% assign openDiv = false %}
+    {% for block in section.blocks %}
+      {% if block.type == 'press_heading' %}
+        {% if openDiv %}</div>{% endif %}
+        {% if block.settings.heading != blank %}
+          <h3 class="press-heading">{{ block.settings.heading }}</h3>
+        {% endif %}
+        {% if block.settings.subheading != blank %}
+          <h4 class="press-subheading">{{ block.settings.subheading }}</h4>
+        {% endif %}
+        <div class="grid">
+        {% assign openDiv = true %}
+      {% elsif block.type == 'press_item' %}
+        {% if forloop.first == true %}<div class="grid">
+          {% assign openDiv = true %}
+        {% endif %}
+        {% include 'press-room-item' %}
+        {% if forloop.last == true %}</div>{% endif %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Press Room Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "press_room_page_title",
+      "label": "Press Room Page Title"
+    },
+    {
+      "type": "richtext",
+      "id": "press_room_page_description",
+      "label": "Press Room Page Description"
+    },
+    {
+      "type": "image_picker",
+      "id": "press_room_header_img",
+      "label": "Press Room Header Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "press_item",
+      "name": "Press Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "publication_image",
+          "label": "Publication Background Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "publication_logo",
+          "label": "Publication Logo"
+        },
+        {
+          "type": "text",
+          "id": "logo_text_alt",
+          "label": "Logo Text Alternative",
+          "info": "Use text instead of a logo."
+        },
+        {
+          "type": "text",
+          "id": "publication_title",
+          "label": "Title",
+          "info": "No more than 100 characters."
+        },
+        {
+          "type": "url",
+          "id": "publication_link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "press_heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

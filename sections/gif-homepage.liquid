@@ -1,0 +1,89 @@
+<section class="relative container container--no-mobile-padding large-row gif-section section-{{ section.id }}" data-section="gif-homepage">
+ <div class="page-width">
+    {% if section.settings.title != blank %}
+      <div class="text-center large-row">
+        <h2 class="row">{{ section.settings.title }}</h2>
+        <h3 class="row subheader">{{ section.settings.subtitle }}</h3>
+      </div>
+    {% endif %}
+    {% if section.settings.gif_link != blank %}
+      <a href="{{ section.settings.gif_link }}" class="full-width relative gif-section"> 
+        <img data-src="{{ section.settings.gif_image | img_url: '3000x' | replace: '_3000x', '' }}" class="gif-desktop lazy" alt="{{ section.settings.gif_image.alt }}"/>
+        <img data-src="{{ section.settings.gif_image_mobile | img_url: '3000x' | replace: '_3000x', '' }}" class="gif-mobile lazy" alt="{{ section.settings.gif_image.alt }}"/>
+      </a>
+    {% else %}
+      <div class="full-width relative gif-section"> 
+        <img data-src="{{ section.settings.gif_image | img_url: '3000x' | replace: '_3000x', '' }}" class="gif-desktop lazy" alt="{{ section.settings.gif_image.alt }}"/>
+        <img data-src="{{ section.settings.gif_image_mobile | img_url: '3000x' | replace: '_3000x', '' }}" class="gif-mobile lazy" alt="{{ section.settings.gif_image.alt }}"/>
+      </div>
+    {% endif %}
+   
+    {% if section.settings.btnText != blank and section.settings.btnLink != blank %}
+      <a href="{{ section.settings.btnLink }}" class="link-button ">{{ section.settings.btnText }}</a>
+    {% endif %}
+  </div>
+</section>
+
+
+
+{% schema %}
+  {
+    "name": "GIF Homepage",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "TRAVEL MORE. PACK LESS."
+      },
+      {
+      "type":"text",
+      "id":"subtitle",
+      "label":"Sub Title",
+      "default": "NEVER CHECK A BAG AGAIN WITH OUR ON-THE-GO WARDROBE"
+      },
+      {
+        "type": "image_picker",
+        "id": "gif_image",
+        "label": "Desktop GIF"
+      },
+      {
+        "type": "image_picker",
+        "id": "gif_image_mobile",
+        "label": "Mobile GIF"
+      },
+      {
+        "type" : "url",
+        "id" : "gif_link",
+        "label" : "GIF Link"
+	    },
+      {
+        "type" : "text",
+        "id" : "btnText",
+        "label" : "Button Text"
+      },
+      {
+        "type" : "url",
+        "id" : "btnLink",
+        "label" : "Button Link"
+	    }
+    ],
+    "presets": [
+      {
+        "name": "GIF Section",
+        "category": "Image"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet 'scss' %}
+
+ 
+ 
+
+
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,255 @@
+<!-- Metrical AC setup Snippet -->
+
+{{ 'option_selection.js' | shopify_asset_url | script_tag }}
+
+{% include 'metrical-ac-config.js' %}
+
+<script
+{% comment %} START Global-e VAT tag {% endcomment %}
+{% if product.selected_or_first_available_variant.taxable == false %}data-product-vat="0" {% endif %}
+{% if product.selected_or_first_available_variant.metafields.GlobalE.product_meta != blank %} data-product-meta='{{product.selected_or_first_available_variant.metafields.GlobalE.product_meta | json | escape}}' {% endif %}
+{% comment %}END Global-e VAT tag {% endcomment %} 
+ type="text/javascript">
+
+    if (typeof _MetricalShopify === "undefined") {
+		_MetricalShopify = {};
+	}
+
+	_MetricalShopify.usermeta = {};
+
+	_MetricalShopify.usermeta.couponcode = null;
+	_MetricalShopify.usermeta.coupontext = null;
+	_MetricalShopify.usermeta.msrpprice = null;
+	_MetricalShopify.usermeta.itemsaleprice = null;
+
+  	_MetricalShopify.usermeta.itemname = "{{ product.title | replace: '"', '\"'}}";
+    _MetricalShopify.usermeta.itemid = "{{ product.id }}";
+    _MetricalShopify.usermeta.sku = "{{ product.first_available_variant.sku }}";
+   	_MetricalShopify.usermeta.itemprice = "{{ product.price | money }}";
+    _MetricalShopify.usermeta.itemcategory = "{{ product.type }}";
+    _MetricalShopify.usermeta.msrpprice = "{{ product.compare_at_price_max | money }}";
+	_MetricalShopify.usermeta.itemsaleprice = "{{ product.price_min | money }}";
+    _MetricalShopify.usermeta.itemfeaturedimage = "{{ product.featured_image }}";
+	
+    _MetricalShopify.tempImages = [];
+
+	{% for image in product.images %}
+		_MetricalShopify.tempImages.push("{{ image | img_url }}");
+	{% endfor %}
+    _MetricalShopify.usermeta.itemimages = "[" + _MetricalShopify.tempImages.join("+") + "]";
+
+
+
+	{% if product.collections %}
+		_MetricalShopify.tempTitles = [];
+		{% for collection in product.collections %}
+			_MetricalShopify.tempTitles.push("{{ collection.title | replace: '"','\"' }}");
+		{% endfor %}
+		_MetricalShopify.usermeta.itemsubcategory = _MetricalShopify.tempTitles.join("/");
+	{% else %}
+		_MetricalShopify.usermeta.itemsubcategory = "";
+	{% endif %}
+
+
+
+
+    _MetricalShopify.usermeta.itemvendor = "{{ product.vendor }}";
+ 	_MetricalShopify.usermeta.numimages = "{{ product.images | size }}";
+ 	_MetricalShopify.usermeta.totalcartvalue = "";
+ 	
+    _MetricalShopify.inCheckout = false;
+
+	{% if checkout.line_items %}
+
+		_MetricalShopify.inCheckout = true;
+
+		{% assign cartCount = 0 %}
+		{% assign cartProductIds = '[' %}
+		{% assign cartProductSkus = '[' %}
+		{% assign cartProductQtys = '[' %}
+		{% assign cartProductPrices = '[' %}
+
+		{% for line_item in checkout.line_items %}
+			{% assign price = line_item.price | money | remove: ' ' %}
+			{% assign cartCount = cartCount | plus: line_item.quantity %}
+			{% assign cartProductIds = cartProductIds | append: line_item.product_id | append: '+' %}
+			{% assign cartProductSkus = cartProductSkus | append: line_item.sku | append: '+' %}
+			{% assign cartProductQtys = cartProductQtys | append: line_item.quantity | append: '+' %}
+			{% assign cartProductPrices = cartProductPrices | append: price | remove: ' ' | append: '+' %}
+
+			{% if forloop.last %}
+			{% assign cartProductIds = cartProductIds | append: ']' %}
+			{% assign cartProductSkus = cartProductSkus | append: ']' %}
+			{% assign cartProductQtys = cartProductQtys | append: ']' %}
+			{% assign cartProductPrices = cartProductPrices | append: ']' %}
+			{% endif %}
+		{% endfor %}
+
+		_MetricalShopify.usermeta.cartidlist = "{{ cartProductIds | replace: '+]',']' }}";
+		_MetricalShopify.usermeta.cartskulist = "{{ cartProductSkus | replace: '+]',']' }}";
+		_MetricalShopify.usermeta.cartqtylist = "{{ cartProductQtys | replace: '+]',']' }}";
+		_MetricalShopify.usermeta.cartpricelist = "{{ cartProductPrices | replace: '+]',']' }}";
+
+		_MetricalShopify.usermeta.subtotalcartvalue = "{{ checkout.subtotal_price | money | remove: ' ' }}";
+		_MetricalShopify.usermeta.shippingcost = "{{ checkout.shipping_price | money | remove: ' ' }}";
+		_MetricalShopify.usermeta.tax = "{{ checkout.tax_price | money | remove: ' ' }}";
+		_MetricalShopify.usermeta.discountsapplied = {% if checkout.discounts_amount > 0 %}true{% else %}false{% endif %};
+		_MetricalShopify.usermeta.discountvalue = {% if checkout.discounts_amount > 0 %}"{{ checkout.discounts_amount | money | remove: ' ' }}"{% else %}"$0"{% endif %};
+
+		_MetricalShopify.tempDiscountCodes = [];
+		_MetricalShopify.tempDiscountTitles = [];
+		{% for discount in checkout.discounts %}
+			_MetricalShopify.tempDiscountCodes.push("{{ discount.code | replace: '"','\"' }}");
+			_MetricalShopify.tempDiscountTitles.push("{{ discount.title | replace: '"','\"' }}");
+		{% endfor %}
+		if (_MetricalShopify.tempDiscountCodes.length == 1) {
+			_MetricalShopify.usermeta.couponcode = _MetricalShopify.tempDiscountCodes[0];
+		}
+		if (_MetricalShopify.tempDiscountCodes.length > 1) {
+			_MetricalShopify.usermeta.couponcode = "[" + _MetricalShopify.tempDiscountCodes.join("+") + "]";
+		}
+
+		if (_MetricalShopify.tempDiscountTitles.length == 1) {
+			_MetricalShopify.usermeta.coupontext = _MetricalShopify.tempDiscountTitles[0];
+		}
+		if (_MetricalShopify.tempDiscountTitles.length > 1) {
+			_MetricalShopify.usermeta.coupontext = "[" + _MetricalShopify.tempDiscountTitles.join("+") + "]";
+		}
+
+
+		{% assign arr = cartProductIds | remove: '[' | remove: '+]' | split: '+' | uniq | size %}
+
+		_MetricalShopify.usermeta.numuniqueitemsincart = "{{ arr }}";
+		_MetricalShopify.usermeta.numuniqueskusincart = "{{ checkout.line_items | size }}";
+		_MetricalShopify.usermeta.totalnumitemsincart = "{{ cartCount }}";
+
+		_MetricalShopify.usermeta.checkoutid = "{{checkout.id}}";
+		_MetricalShopify.usermeta.orderid = "{{checkout.order_id}}";
+		_MetricalShopify.usermeta.ordernumber = "{{checkout.order_number}}";
+		
+		temptotalcartvalue = "{{ checkout.total_price | money }}";
+		
+		patt = new RegExp("\/checkouts\/.*?\/thank_you");
+        urlMatches = patt.test(window.location.href);
+        //Only add the total cart value to the user meta if is the end of the checkout process
+        if (urlMatches) {
+        	_MetricalShopify.usermeta.totalcartvalue = temptotalcartvalue;
+        }
+		
+
+	{% else %}
+
+		_MetricalShopify.usermeta.numuniqueitemsincart = "{{ cart.items | size }}";
+		_MetricalShopify.usermeta.totalnumitemsincart = 0;
+		{% if cart.item_count %}
+			_MetricalShopify.usermeta.totalnumitemsincart = "{{ cart.item_count }}";
+		{% endif %}
+		cartidlist = [];
+		cartqtylist = [];
+		cartpricelist = [];
+		cartskulist = [];
+		{% for line_item in cart.items %}
+			cartidlist.push("{{ line_item.product_id }}");
+			cartskulist.push("{{ line_item.sku }}");
+			cartqtylist.push("{{ line_item.quantity }}");
+			cartpricelist.push("{{ line_item.price | money }}");
+		{% endfor %}
+
+
+		if (cartidlist.length > 0) {
+			_MetricalShopify.usermeta.cartidlist = "[" + cartidlist.join("+") + "]";
+		} else {
+			_MetricalShopify.usermeta.cartidlist = null;
+		}
+
+		if (cartskulist.length > 0) {
+			_MetricalShopify.usermeta.cartskulist = "[" + cartskulist.join("+") + "]";
+		} else {
+			_MetricalShopify.usermeta.cartskulist = null;
+		}
+		if (cartqtylist.length > 0) {
+			_MetricalShopify.usermeta.cartqtylist = "[" + cartqtylist.join("+") + "]";
+		} else {
+			_MetricalShopify.usermeta.cartqtylist = null;
+		}
+
+		if (cartpricelist.length > 0) {
+			_MetricalShopify.usermeta.cartpricelist = "[" + cartpricelist.join("+") + "]";
+		} else {
+			_MetricalShopify.usermeta.cartpricelist = null;
+		}
+
+		_MetricalShopify.usermeta.subtotalcartvalue = "{{ cart.original_total_price | money }}";
+	{% endif %}
+
+	{%- assign cartJson = cart | json -%}
+	{%- assign cartToken = cartJson | split:'token":"' | last | split:'"' | first -%}
+
+	_MetricalShopify.usermeta.cartid = "{{ cartToken }}";
+    
+  	_MetricalShopify.usermeta.shippingcost = "{{ checkout.shipping_price | money }}";
+    _MetricalShopify.usermeta.shippingtmethod = "{{ checkout.shipping_method.title }}";
+	_MetricalShopify.usermeta.shipcity = "{{ checkout.shipping_address.city }}";
+	_MetricalShopify.usermeta.shipstate = "{{ checkout.shipping_address.province }}";
+	_MetricalShopify.usermeta.shipzip = "{{ checkout.shipping_address.zip }}";
+	_MetricalShopify.usermeta.shipcountry = "{{ checkout.shipping_address.country }}";
+    _MetricalShopify.usermeta.billcity = "{{ checkout.billing_address.city }}";
+	_MetricalShopify.usermeta.billstate = "{{ checkout.billing_address.province }}";
+	_MetricalShopify.usermeta.billzip = "{{ checkout.billing_address.zip }}";
+	_MetricalShopify.usermeta.billcountry = "{{ checkout.billing_address.country }}";
+
+	_MetricalShopify.usermeta.isloggedin = false;
+    _MetricalShopify.usermeta.previouspurchasecount = "0";
+	_MetricalShopify.usermeta.previouspurchasevalue = "0";
+
+	_MetricalShopify.usermeta.customerid = null;
+    
+	{% if customer %}
+    	_MetricalShopify.usermeta.isloggedin = true;
+
+		_MetricalShopify.usermeta.customerid = "{{customer.id}}";
+
+        var totalPrices = [];
+    	var orderCount = 0;
+        {% for order in customer.orders %}
+		    totalPrices.push({{ order.total_price }});
+    		orderCount++;
+        {% endfor %}
+    	
+		_MetricalShopify.usermeta.previouspurchasecount = orderCount;
+		var previousPurchaseValue = (totalPrices.reduce(function(acc,price) { return acc + price; })) / 100;
+		_MetricalShopify.usermeta.previouspurchasevalue = previousPurchaseValue;
+
+    {% endif %}
+    
+	
+    _MetricalShopify.usermeta.tax = "{{ checkout.tax_price | money }}";
+	_MetricalShopify.usermeta.discountvalue = "{{ checkout.discounts_amount | money }}";
+    _MetricalShopify.usermeta.shippingmethodcost = "{{ checkout.shipping_method.price | money }}";;
+    _MetricalShopify.usermeta.shipdifferentthanbill = false;
+	_MetricalShopify.usermeta.discountsapplied = false;
+	{% if checkout %}
+	  {% if checkout.shipping_address != checkout.billing_address %}
+		_MetricalShopify.usermeta.shipdifferentthanbill = true;
+	  {% endif %}
+	  {% if checkout.discounts.size > 0 %}
+		_MetricalShopify.usermeta.discountsapplied = true;
+      {% endif %}
+	{% endif %}
+	_MetricalShopify.usermeta.paymentmethod = "{{ checkout.transactions.gateway }}";
+    //Not available
+	_MetricalShopify.usermeta.customerrating = null;
+	_MetricalShopify.usermeta.isgift = null;
+	_MetricalShopify.usermeta.gender  = null;
+	_MetricalShopify.usermeta.accountcreationdate = null;
+    _MetricalShopify.usermeta.itemgender = null;
+	_MetricalShopify.usermeta.itemstocklife = null;
+	_MetricalShopify.usermeta.isfeatured = null;
+	_MetricalShopify.usermeta.isbookmarked = null;
+	_MetricalShopify.usermeta.couponavailable = false;
+	_MetricalShopify.usermeta.numreviews = null;
+	_MetricalShopify.usermeta.customerrating = null;
+    _MetricalShopify.usermeta.discountedshipping = null;
+
+</script>
+

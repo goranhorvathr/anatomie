@@ -1,0 +1,466 @@
+{% include 'additional-page-sections' %}
+
+{% schema %}
+{
+  "name": "Brand Banners",
+  "class": "page-section-blocks",
+  "blocks": [
+    {
+      "type": "header_slide",
+      "name": "Header Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "type": "select",
+          "id": "text_color",
+          "label": "Text Color",
+          "options": [
+            {
+              "value": "black",
+              "label": "Black"
+            },
+            {
+              "value": "white",
+              "label": "White"
+            }
+          ],
+          "default": "black"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Link to navigate to if the user clicks on the slide"
+        },
+        {
+          "type": "header",
+          "content": "Additional Logos"
+        },
+        {
+          "type": "select",
+          "id": "logo_position",
+          "label": "Positioning",
+          "options": [
+            {
+              "label": "Left",
+              "value": "left"
+            },
+            {
+              "label": "Center",
+              "value": "center"
+            },
+            {
+              "label": "Right",
+              "value": "right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo1",
+          "label": "Logo 1",
+          "info": "Displayed centered at the bottom of the slide."
+        },
+        {
+          "type": "text",
+          "id": "logo1_filename",
+          "label": "Logo 1 (File URL)",
+          "info": "Displayed centered at the bottom of the slide. Enter the filename of a SVG in the Files respository."
+        },
+        {
+          "type": "image_picker",
+          "id": "logo2",
+          "label": "Logo 2",
+          "info": "Displayed centered at the bottom of the slide."
+        },
+        {
+          "type": "text",
+          "id": "logo2_filename",
+          "label": "Logo 2 (File URL)",
+          "info": "Displayed centered at the bottom of the slide. Enter the filename of a SVG in the Files respository."
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "name": "Inline Header",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "full_width",
+          "label": "Full Width",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "type": "select",
+          "id": "text_color",
+          "label": "Text Color",
+          "options": [
+            {
+              "value": "black",
+              "label": "Black"
+            },
+            {
+              "value": "white",
+              "label": "White"
+            }
+          ],
+          "default": "black"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Link to navigate to if the user clicks on the slide"
+        }
+      ]
+    },
+    {
+      "type": "full_width_image",
+      "name": "Full Width Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Link to navigate to if the user clicks on the image"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#EFEEEA"
+        }
+      ]
+    },
+    {
+      "type": "full_width_text",
+      "name": "Full Width Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type" : "checkbox",
+          "id" : "padded-view",
+          "label" : "Smaller Width"
+        }
+      ]
+    },
+    {
+      "type": "left_right_split",
+      "name": "Left/Right Image Content",
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_position",
+          "label": "Media Position",
+          "options": [
+            {
+              "label": "Left",
+              "value": "left"
+            },
+            {
+              "label": "Right",
+              "value": "right"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#EFEEEA"
+        }
+      ]
+    },
+    {
+      "type": "left_right_video",
+      "name": "Left/Right Video Content",
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_position",
+          "label": "Media Position",
+          "options": [
+            {
+              "label": "Left",
+              "value": "left"
+            },
+            {
+              "label": "Right",
+              "value": "right"
+            }
+          ]
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "label": "YouTube or Vimeo Video link",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+        },
+        {
+          "type": "text",
+          "id": "html5_video",
+          "label": "HTML5 MP4/OGV File URL"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#EFEEEA"
+        }
+      ]
+    },
+    {
+      "type": "full_width_video",
+      "name": "Full Width Video",
+      "settings": [
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "label": "Video link",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+        },
+        {
+          "type": "video_url",
+          "id": "mobile_video_url",
+          "label": "Mobile Video link",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+        }
+      ]
+    },
+    {
+      "type": "video_banner",
+      "name": "Video Banner With Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "label": "Video link",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+        },
+        {
+          "type": "video_url",
+          "id": "mobile_video_url",
+          "label": "Mobile Video link",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#EFEEEA"
+        }
+      ]
+    },
+    {
+      "type": "side_by_side_review",
+      "name": "Side-By-Side Reviews",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "header",
+          "content": "Review 1"
+        },
+        {
+          "type": "textarea",
+          "id": "review1",
+          "label": "Review Text"
+        },
+        {
+          "type": "text",
+          "id": "reviewer_name1",
+          "label": "Reviewer Name"
+        },
+        {
+          "type": "text",
+          "id": "reviewer_title1",
+          "label": "Reviewer Title"
+        },
+        {
+          "type": "header",
+          "content": "Review 2"
+        },
+        {
+          "type": "textarea",
+          "id": "review2",
+          "label": "Review Text"
+        },
+        {
+          "type": "text",
+          "id": "reviewer_name2",
+          "label": "Reviewer Name"
+        },
+        {
+          "type": "text",
+          "id": "reviewer_title2",
+          "label": "Reviewer Title"
+        }
+      ]
+    },
+    {
+      "type": "image_two_columns",
+      "name": "Image w/ Text Columns",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "header",
+          "content": "Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "desktop_image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image"
+        },
+        {
+          "type": "header",
+          "content": "Columns"
+        },
+        {
+          "type": "html",
+          "id": "column1",
+          "label": "Column 1 Text"
+        },
+        {
+          "type": "html",
+          "id": "column2",
+          "label": "Column 2 Text"
+        }
+      ]
+    },
+    {
+      "type": "featured_collection",
+      "name": "Featured collection",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Featured collection"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text",
+          "default": "Shop now"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "row_count",
+          "label": "Rows",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 1
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

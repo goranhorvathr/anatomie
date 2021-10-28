@@ -1,0 +1,54 @@
+{%- assign products_html = '' %}
+{%- assign all_product_handles = '' | split: ' ' -%}
+{%- assign split_content = content | split: 'href="' -%}
+{%- assign products_output_count = 0 %}
+{%- assign lazyload_after = lazyload_after | default: 10 -%}
+
+{%- for chunk in split_content -%}
+  {%- assign this_href = chunk | split: '"' | first -%}
+  {%- if this_href contains '/products/' -%}
+    {%- assign chunk_handle = this_href | split: '/' | last | split: '?' | first -%}
+    {%- unless all_product_handles contains chunk_handle -%}
+      {%- if products_output_count >= lazyload_after -%}
+        {%- capture products_html -%}
+          {{- products_html -}}
+          <div class="product-block grid__item one-third small-down--one-half" data-lazy-product-handle="{{ chunk_handle }}"></div>
+        {%- endcapture -%}
+      {%- else -%}
+        {%- assign product = all_products[chunk_handle] -%}
+        {%- if product != blank -%}
+            {%- capture products_html -%}
+              {{- products_html -}}
+              {%- include 'product-block', grid_class: 'grid__item one-third small-down--one-half' -%}
+            {%- endcapture -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- assign products_output_count = products_output_count | plus: 1 %}
+    {%- endunless -%}
+  {%- endif -%}
+  {%- assign add_product_handle = chunk_handle | split: ' ' -%}
+  {%- assign all_product_handles = all_product_handles | concat: add_product_handle -%}
+{%- endfor -%}
+
+{% unless products_html == blank %}
+  <div class="content-products product-carousel-peek">
+    {% capture title %}{{ 'blogs.article.products_title' | t }}{% endcapture %}
+    <div class="flex">
+      {% if title != blank %}
+        <div class="content-products__title">{{ title }}</div>
+      {% endif %}
+      {% if products_output_count > 3 %}
+        <div class="content-products-controls">
+          <button class="btn--plain prev icon feather-icon" aria-label="{{ 'general.accessibility_labels.previous' | t | escape }}">{% include 'feather-arrow-left' %}</button>
+          <button class="btn--plain next icon feather-icon" aria-label="{{ 'general.accessibility_labels.next' | t | escape }}">{% include 'feather-arrow-right' %}</button>
+        </div>
+      {% endif %}
+    </div>
+    <div class="content-products__products">
+      <div class="grid grid--uniform">
+        {{ products_html }}
+      </div>
+    </div>
+    {% include 'peek-carousel-advice' %}
+  </div>
+{% endunless %}

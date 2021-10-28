@@ -1,0 +1,18 @@
+<section class="relative">
+  {{ section.settings.custom_html }}
+</section>
+
+{% schema %}
+  {
+    "name": "Benefits",
+    "settings": [
+      {
+        "type": "html",
+        "id": "custom_html",
+        "label": "Custom HTML",
+        "default": "<h2>Talk about your brand</h2><p>Use HTML to format your text so it can be easily read. This text can be used to share information about your brand with customers.</p>",
+        "info": "Please note that errors in any custom HTML can affect your theme layout. Please make sure all HTML is valid."
+      }
+    ]
+  }
+{% endschema %}
